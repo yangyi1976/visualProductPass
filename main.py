@@ -1,6 +1,5 @@
-import json
 import  sys,os
-
+import shelve
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt, QFile, QSize, QPoint, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction
@@ -250,6 +249,8 @@ class MainWindow(QWidget):
             # 'Content-type':'multipart/form-data',
             'X-Requested-With': 'XMLHttpRequest'}
         # servIP='172.16.18.127:8089'
+        shelf = shelve.open('cfg')
+        servIP=shelf['ORCServer_IP']+":8089"
         post_url='http://'+servIP+'/api/tr-run/'
 
         imgData = {'file': ('cartNum.jpg',open(fileName, 'rb'),'image/jpeg'),'compress':'200'}
