@@ -49,7 +49,7 @@ class CartROIdetector(object ):
             #高/宽之比
             occupy = float(h) / w
             # 7<=比值<=11，可以配置成参数
-             
+
             if occupy >= int(self.occpuyMin) and occupy <= int(self.occpuyMax):
                 s = cv.contourArea(c) #计算区域的面积
                 if max_w < w:      #宽大于最大值，更换面积s
