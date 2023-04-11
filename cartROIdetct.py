@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+import shelve
 
 class CartROIdetector(object ):
 
@@ -9,6 +10,7 @@ class CartROIdetector(object ):
         :param src_image:
         :return:
         '''
+        shelf = shelve.open('cfg')
         # src_image=cv.imread(r'F:\PycharmProjects\pp_ocr_py34\img\274.jpg')
         deliate_img = self.preProcessImg(src_image) #图片预处理，二值化+膨胀
         x,y,w,h=self.Extract(deliate_img)
