@@ -1,0 +1,10 @@
+#python 3.4.4(可安装虚拟环境),opencv-python 4.0.0.21,pyqt5 5.4.2（需独立安装包安装，不能pip install）
+img/
+test/
+venv/
+__pycache__/
+.idea/
+dist/
+py34_tesseract.py
+
+
