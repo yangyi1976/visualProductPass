@@ -5,7 +5,7 @@ from infoMessageBox import InfoMessageBox
 from PyQt5.QtCore import  Qt,   QSize,  pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
 
-from PyQt5.QtGui import QPixmap, QIcon, QFont, QBrush, QColor
+from PyQt5.QtGui import QPixmap, QIcon, QFont
 from ui_roitable import Ui_ROITableWindow
 from zoomImgWiin import ZoomImgwin
 

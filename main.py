@@ -9,6 +9,7 @@ from cameraThread import CameraThread
 from ViewImageWin import ViewImageWidget
 from PyQt5.QtGui import QPixmap, QIcon, QBrush, QCursor, QImage
 from roiTableWindow import ViewROITableWin
+from paramSetupWindow import ParamSetupWin
 from cartROIdetct import  CartROIdetector
 import  cv2
 import requests
@@ -293,6 +294,10 @@ class MainWindow(QWidget):
             paperPixmap.load(imgFileList[n] + ".jpg")
             fileName = (imgFileList[n])[imgFileList[n].rfind('\\') + 1:]
             self.addListWidgetImageItem(paperPixmap,fileName)
+    @pyqtSlot()
+    def on_btnSetup_clicked(self):
+        self.paramSetupWin=ParamSetupWin()
+        self.paramSetupWin.show()
 
     def closeEvent(self,event):
         print("关闭主程序窗口")
