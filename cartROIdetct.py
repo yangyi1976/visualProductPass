@@ -11,6 +11,10 @@ class CartROIdetector(object ):
         :return:
         '''
         shelf = shelve.open('cfg')
+        self.kernelWidth=shelf['kernelWidth']
+        self.kernelHeight=shelf['kernelHeight']
+        self.occpuyMin=shelf['ocuppyMin']
+        self.occpuyMax=shelf['ocuppyMax']
         # src_image=cv.imread(r'F:\PycharmProjects\pp_ocr_py34\img\274.jpg')
         deliate_img = self.preProcessImg(src_image) #图片预处理，二值化+膨胀
         x,y,w,h=self.Extract(deliate_img)
@@ -45,7 +49,8 @@ class CartROIdetector(object ):
             #高/宽之比
             occupy = float(h) / w
             # 7<=比值<=11，可以配置成参数
-            if occupy >= 7.0 and occupy <= 12:
+             
+            if occupy >= int(self.occpuyMin) and occupy <= int(self.occpuyMax):
                 s = cv.contourArea(c) #计算区域的面积
                 if max_w < w:      #宽大于最大值，更换面积s
                     max_x = x
@@ -78,7 +83,8 @@ class CartROIdetector(object ):
         # cv.waitKey(0)
 
         # 膨胀卷积核 RECTANGULAR
-        kernel = cv.getStructuringElement(cv.MORPH_RECT, (2, 5))
+
+        kernel = cv.getStructuringElement(cv.MORPH_RECT, (int(self.kernelWidth), int(self.kernelHeight)))
         dilate = cv.dilate(binary_img, kernel, iterations=5)
 
         cv.imshow('Eroded image', dilate)
