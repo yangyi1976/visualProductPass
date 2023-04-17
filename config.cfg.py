@@ -8,6 +8,7 @@ shelf['cameraWidth']='1900'
 shelf['cameraHeight'] ='1600'
 shelf['ocuppyMin'] ='7'
 shelf['ocuppyMax']='11'
+shelf['cameraIndex']='0'
 
 shelf.close()
 

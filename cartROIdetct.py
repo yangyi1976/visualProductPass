@@ -20,7 +20,7 @@ class CartROIdetector(object ):
         x,y,w,h=self.Extract(deliate_img)
         #提却ROI区域图像
         cut_img = src_image[y - 3:y + h + 10, x - 3:x + w + 10]
-        cut_img = np.rot90(cut_img, 1)
+        # cut_img = np.rot90(cut_img, 1)
         # cv.imshow('Enlarged original image', cut_img)
         # cv.waitKey(0)
         return cut_img
@@ -69,7 +69,7 @@ class CartROIdetector(object ):
 
         #转换为灰度图像
         img_src = cv.cvtColor(img_src, cv.COLOR_BGR2GRAY)
-        # img_src = cv.equalizeHist(img_src)
+        img_src = cv.equalizeHist(img_src)
         # cv.imshow('Original GRAY image', img_src)
         # cv.waitKey(0)
         # 将图像转化成标准大小
@@ -85,7 +85,7 @@ class CartROIdetector(object ):
         # 膨胀卷积核 RECTANGULAR
 
         kernel = cv.getStructuringElement(cv.MORPH_RECT, (int(self.kernelWidth), int(self.kernelHeight)))
-        dilate = cv.dilate(binary_img, kernel, iterations=5)
+        dilate = cv.dilate(binary_img, kernel, iterations=6)
 
         cv.imshow('Eroded image', dilate)
         cv.waitKey(0)

@@ -1,9 +1,12 @@
 import sys
 import shelve
+
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtCore import Qt,pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, QSize
 from ui_pramaSetup import Ui_winParamSetup
 from infoMessageBox import InfoMessageBox
+import cv2
 
 class ParamSetupWin(QWidget):
     def __init__(self, parent=None):
@@ -17,7 +20,29 @@ class ParamSetupWin(QWidget):
                               "color:#00ffff;"
                               "font-weight:bold;"
                               "font-size:18px;" )
+        # cameraCount=self.getCameraCount()
+        self.ui.btnSwitch.setIcon(QIcon("icon/greenDBArrow.ico"))
+        self.ui.btnSwitch.setIconSize(QSize(32, 32))
+        self.cameraModified=False
         self.initParamData()
+
+
+    def getCameraCount(self):
+        '''
+        获取摄像头数量，但是遍历需要依次捕获每个摄像头的视频流，速度有些慢，尤其是usb摄像头。
+        :return:
+        '''
+        i=0
+        while(True):
+            cap = cv2.VideoCapture(i,cv2.CAP_DSHOW)
+            stream=cap.grab()
+            cap.release()
+            if not stream :
+                break
+            i=i+1
+        return i
+
+
 
     def initParamData(self):
         shelf = shelve.open('cfg')
@@ -28,6 +53,11 @@ class ParamSetupWin(QWidget):
         self.ui.lnCamraHeight.setText(shelf['cameraHeight'])
         self.ui.lnOcuppyMin.setText(shelf['ocuppyMin'])
         self.ui.lnOcuppyMax.setText(shelf['ocuppyMax'])
+        self.ui.comCameraIndx.setCurrentText(shelf['cameraIndex'])
+
+    @pyqtSlot(int)
+    def on_comCameraIndx_currentIndexChanged(self):
+        self.cameraModified=True
 
     @pyqtSlot()
     def on_btnSave_clicked(self):
@@ -39,8 +69,8 @@ class ParamSetupWin(QWidget):
         shelf['cameraHeight'] =  self.ui.lnCamraHeight.text()
         shelf['ocuppyMin'] =  self.ui.lnOcuppyMin.text()
         shelf['ocuppyMax'] =  self.ui.lnOcuppyMax.text()
-        print("save")
-        self.close()
+        shelf['cameraIndex']=self.ui.comCameraIndx.currentText()
+        # self.close()
 
     @pyqtSlot()
     def on_btnDefault_clicked(self):
@@ -55,8 +85,38 @@ class ParamSetupWin(QWidget):
             shelf['cameraHeight'] = '1600'
             shelf['ocuppyMin'] = '7'
             shelf['ocuppyMax'] = '11'
+            shelf['cameraIndex']='0'
             shelf.close()
             self.initParamData()
+
+    @pyqtSlot()
+    def on_btnSwitch_clicked(self):
+        '''
+        交换卷积kernel宽与高
+        :return:
+        '''
+        width=self.ui.lnKernelWidth.text()
+        self.ui.lnKernelWidth.setText(self.ui.lnKernelHeight.text())
+        self.ui.lnKernelHeight.setText(width)
+
+
+
+    @pyqtSlot()
+    def on_btnClose_clicked(self):
+        self.close()
+
+
+    def closeEvent(self, QCloseEvent):
+        if self.cameraModified:
+            reply = self.infoBox.warn("摄像头参数修改，需重启程序生效")
+        else:
+            reply = self.infoBox.warn("确定已经保存修改？")
+        if reply == InfoMessageBox.Yes:
+            self.on_btnSave_clicked()
+            self.close()
+        else:
+            QCloseEvent.ignore()
+
 
 
 if __name__ == "__main__":

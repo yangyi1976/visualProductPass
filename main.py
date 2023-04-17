@@ -1,12 +1,12 @@
 import  sys,os
 import shelve
 from PyQt5 import QtGui
-from PyQt5.QtCore import QEvent, Qt, QFile, QSize, QPoint, pyqtSlot
+from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction
 from ui_mainWindow import Ui_Form
 from cameraThread import CameraThread
 from ViewImageWin import ViewImageWidget
-from PyQt5.QtGui import QPixmap, QIcon, QBrush, QCursor, QImage
+from PyQt5.QtGui import QPixmap, QIcon, QBrush, QCursor
 from roiTableWindow import ViewROITableWin
 from paramSetupWindow import ParamSetupWin
 from cartROIdetct import  CartROIdetector
@@ -19,10 +19,20 @@ class MainWindow(QWidget):
         self.ui=Ui_Form()
         self.ui.setupUi(self)
         self.ui.lbCamera.setMouseTracking(True)
-        self.ui.lbCamera.installEventFilter(self)
+        self.ui.lbCamera.installEventFilter(self) #安装事件监听器
         self.ui.btnSetup.setText("")
         self.ui.btnSetup.setIcon(QIcon("icon/setup.ico"))
         self.ui.btnSetup.setIconSize(QSize(32,32))
+        self.ui.btnCounterRot.setIcon(QIcon("icon/rotate-left.ico"))
+        self.ui.btnCounterRot.setIconSize(QSize(32,32))
+        self.ui.btnRot.setIcon(QIcon("icon/rotate-right.ico"))
+        self.ui.btnRot.setIconSize(QSize(32, 32))
+        self.ui.btnViewROITable.setIcon(QIcon("icon/winprops.ico"))
+        self.ui.btnViewROITable.setIconSize(QSize(32, 32))
+        self.ui.btnUploadRIO.setIcon(QIcon("icon/remote.ico"))
+        self.ui.btnUploadRIO.setIconSize(QSize(32, 32))
+        self.ui.btnUpLocal.setIcon(QIcon("icon/kwrite.ico"))
+        self.ui.btnUpLocal.setIconSize(QSize(32, 32))
         # self.ui.lbCamera.setScaledContents(True)
 
         self.lButtonDownFlag = False
@@ -33,9 +43,12 @@ class MainWindow(QWidget):
         self.rectH = 0
         self.rectW = 0
         self.listROI_fileName=[]
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # cv2.CAP_DSHOW参数为操作系统提供的后台视频流库处理接口
+        self.getInitParam() #获取配置参数
+        self.cap = cv2.VideoCapture(self.cameraIndex, cv2.CAP_DSHOW)  # cv2.CAP_DSHOW参数为操作系统提供的后台视频流库处理接口
         # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+
         self.th = CameraThread(self.cap)
         self.th.flashPixmap.connect(self.setImage)
         self.th.start()
@@ -46,6 +59,7 @@ class MainWindow(QWidget):
         self.label_mousePos.setStyleSheet('background-color:green; border: 1px solid black')
         self.cartNoDetector=CartROIdetector()
 
+
     def initListWidget(self):
         self.ui.lsImgROIWidget.setFlow(QListView.Flow(1))  # 0: left to right,1: top to bottom
         self.ui.lsImgROIWidget.setViewMode(QListView.IconMode)
@@ -55,6 +69,12 @@ class MainWindow(QWidget):
         self.ui.lsImgROIWidget.setIconSize(QSize(200, h-50))
         self.ui.lsImgROIWidget.itemClicked.connect(self.showImage)
         self.lastItem=QListWidgetItem()
+
+    def getInitParam(self):
+        shelf = shelve.open('cfg')
+        self.servIP = shelf['ORCServer_IP'] + ":8089"
+        self.cameraIndex=int(shelf['cameraIndex'])
+        shelf.close()
 
     def rightMenuListWidget(self):
         rightMenu = QMenu(self.ui.lsImgROIWidget)
@@ -126,7 +146,7 @@ class MainWindow(QWidget):
 
     def eventFilter(self, o, evn):
         '''
-        事件过滤器，需要先安装时间监听器
+        事件过滤器，需要先安装事件监听器
         :param o:  发出事件的对象
         :param evn: 事件
         :return:
@@ -157,7 +177,7 @@ class MainWindow(QWidget):
                 self.lButtonDownFlag=False
                 if self.startPX == self.endPX :
                     self.label_mousePos.close()
-                    return
+                    return  super().eventFilter(o, evn)
 
                 ROIw = abs(self.rectW)   #当选择区域的方向与坐标轴相反时候，需要计算起始点
                 startX= self.startX if self.rectW>0 else self.startX + self.rectW
@@ -206,7 +226,6 @@ class MainWindow(QWidget):
         self.viewRoiTable.show()
 
     @pyqtSlot()
-
     def on_btnDetcCart_clicked(self):
         #获取预处理后的车号ROI图像，cv2格式,并保存为文件。
         cartNumImg=self.th.cartNumCapture()
@@ -214,9 +233,9 @@ class MainWindow(QWidget):
         cv2.imwrite(fullName, cartNumImg)
         print("开始识别车号")
         # self.postImg(r'F:\PycharmProjects\pp_ocr_py34\img\1cartNum.jpg')
-        servIP='172.16.18.127:8089'
+        # servIP='172.16.18.127:8089'
         try:
-            self.postImg(fullName,servIP)
+            self.postImg(fullName,self.servIP)
         except Exception as e:
             QMessageBox.information(self,"错误",str(e)+"\n --无法进行车号的OCR识别，请重新调整再进识别！")
         #在控件里显示车号图片
@@ -248,12 +267,9 @@ class MainWindow(QWidget):
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
             # 'Content-type':'multipart/form-data',
             'X-Requested-With': 'XMLHttpRequest'}
-        # servIP='172.16.18.127:8089'
-        shelf = shelve.open('cfg')
-        servIP=shelf['ORCServer_IP']+":8089"
         post_url='http://'+servIP+'/api/tr-run/'
 
-        imgData = {'file': ('cartNum.jpg',open(fileName, 'rb'),'image/jpeg'),'compress':'200'}
+        imgData = {'file': ('cartNum.jpg',open(fileName, 'rb'),'image/jpeg'),'compress':'300'}
         imgData_encoder = MultipartEncoder(imgData)
         headers['Content-type']=imgData_encoder.content_type
         # data = {'compress': '200'}  可以不用request_toolbelt库以及Content-type
@@ -282,7 +298,6 @@ class MainWindow(QWidget):
         #上传完删除图像文件
         print("上传。。。。")
 
-
     def freshImgListWidget(self, imgFileList):
         '''
         刷新 img listwidget
@@ -295,11 +310,25 @@ class MainWindow(QWidget):
             paperPixmap.load(imgFileList[n] + ".jpg")
             fileName = (imgFileList[n])[imgFileList[n].rfind('\\') + 1:]
             self.addListWidgetImageItem(paperPixmap,fileName)
+
     @pyqtSlot()
     def on_btnSetup_clicked(self):
         self.paramSetupWin=ParamSetupWin()
         self.paramSetupWin.show()
 
+    @pyqtSlot()
+    def on_btnCounterRot_clicked(self):
+        '''
+        图像反时针旋转90度
+        :return:
+        '''
+        pass
+
+    def on_btnRot_clicked(self):
+        '''
+        图像顺时针旋转90度
+        :return:
+        '''
     def closeEvent(self,event):
         print("关闭主程序窗口")
         self.th.cap.release()

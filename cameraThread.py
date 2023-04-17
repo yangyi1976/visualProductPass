@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QTimer, QThread, pyqtSignal, Qt
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtCore import  QThread, pyqtSignal, Qt
+from PyQt5.QtGui import  QImage
 from cartROIdetct import CartROIdetector
 import  cv2, time
 

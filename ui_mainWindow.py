@@ -193,13 +193,6 @@ class Ui_Form(object):
         self.verticalLayout_4.addWidget(self.lbCamera)
         self.gridLayout_3 = QtWidgets.QGridLayout()
         self.gridLayout_3.setObjectName("gridLayout_3")
-        self.lbNumberpPic = QtWidgets.QLabel(Form)
-        self.lbNumberpPic.setStyleSheet("border:1px solid blue;\n"
-"background-color: rgb(148, 148, 148);")
-        self.lbNumberpPic.setTextFormat(QtCore.Qt.AutoText)
-        self.lbNumberpPic.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbNumberpPic.setObjectName("lbNumberpPic")
-        self.gridLayout_3.addWidget(self.lbNumberpPic, 0, 0, 1, 1)
         self.btnDetcCart = QtWidgets.QPushButton(Form)
         self.btnDetcCart.setStyleSheet(":hover\n"
 "{\n"
@@ -219,6 +212,54 @@ class Ui_Form(object):
 "color: rgb(75, 75, 75);}")
         self.btnDetcCart.setObjectName("btnDetcCart")
         self.gridLayout_3.addWidget(self.btnDetcCart, 1, 0, 1, 1)
+        self.btnUploadRIO = QtWidgets.QPushButton(Form)
+        self.btnUploadRIO.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
+"\n"
+":pressed\n"
+"{ \n"
+" padding-left:3px;\n"
+" padding-top:3px;\n"
+"}\n"
+":hover\n"
+"{\n"
+" color:rgb(75, 75, 75);\n"
+"}")
+        self.btnUploadRIO.setObjectName("btnUploadRIO")
+        self.gridLayout_3.addWidget(self.btnUploadRIO, 1, 5, 1, 1)
+        self.lsImgROIWidget = QtWidgets.QListWidget(Form)
+        self.lsImgROIWidget.setObjectName("lsImgROIWidget")
+        self.gridLayout_3.addWidget(self.lsImgROIWidget, 0, 1, 1, 7)
+        self.lbNumberpPic = QtWidgets.QLabel(Form)
+        self.lbNumberpPic.setStyleSheet("border:1px solid blue;\n"
+"background-color: rgb(148, 148, 148);")
+        self.lbNumberpPic.setTextFormat(QtCore.Qt.AutoText)
+        self.lbNumberpPic.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbNumberpPic.setObjectName("lbNumberpPic")
+        self.gridLayout_3.addWidget(self.lbNumberpPic, 0, 0, 1, 1)
+        self.btnCounterRot = QtWidgets.QPushButton(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btnCounterRot.sizePolicy().hasHeightForWidth())
+        self.btnCounterRot.setSizePolicy(sizePolicy)
+        self.btnCounterRot.setMinimumSize(QtCore.QSize(16, 16))
+        self.btnCounterRot.setMaximumSize(QtCore.QSize(72, 72))
+        self.btnCounterRot.setText("")
+        self.btnCounterRot.setObjectName("btnCounterRot")
+        self.gridLayout_3.addWidget(self.btnCounterRot, 1, 2, 1, 1)
+        self.btnUpLocal = QtWidgets.QPushButton(Form)
+        self.btnUpLocal.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
+":pressed\n"
+"{ \n"
+" padding-left:3px;\n"
+" padding-top:3px;\n"
+"}\n"
+":hover\n"
+"{\n"
+" color:rgb(75, 75, 75);\n"
+"}")
+        self.btnUpLocal.setObjectName("btnUpLocal")
+        self.gridLayout_3.addWidget(self.btnUpLocal, 1, 6, 1, 1)
         self.btnViewROITable = QtWidgets.QPushButton(Form)
         self.btnViewROITable.setStyleSheet(" QPushButton{background-color: rgb(0, 255, 0);}\n"
 ":pressed\n"
@@ -233,25 +274,21 @@ class Ui_Form(object):
 " ")
         self.btnViewROITable.setObjectName("btnViewROITable")
         self.gridLayout_3.addWidget(self.btnViewROITable, 1, 1, 1, 1)
-        self.btnUploadRIO = QtWidgets.QPushButton(Form)
-        self.btnUploadRIO.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
-":pressed\n"
-"{ \n"
-" padding-left:3px;\n"
-" padding-top:3px;\n"
-"}\n"
-":hover\n"
-"{\n"
-" color:rgb(75, 75, 75);\n"
-"}")
-        self.btnUploadRIO.setObjectName("btnUploadRIO")
-        self.gridLayout_3.addWidget(self.btnUploadRIO, 1, 2, 1, 1)
-        self.lsImgROIWidget = QtWidgets.QListWidget(Form)
-        self.lsImgROIWidget.setObjectName("lsImgROIWidget")
-        self.gridLayout_3.addWidget(self.lsImgROIWidget, 0, 1, 1, 2)
-        self.gridLayout_3.setColumnStretch(0, 2)
+        self.btnRot = QtWidgets.QPushButton(Form)
+        self.btnRot.setMinimumSize(QtCore.QSize(16, 16))
+        self.btnRot.setMaximumSize(QtCore.QSize(72, 72))
+        self.btnRot.setText("")
+        self.btnRot.setObjectName("btnRot")
+        self.gridLayout_3.addWidget(self.btnRot, 1, 3, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_3.addItem(spacerItem4, 1, 4, 1, 1)
+        self.gridLayout_3.setColumnStretch(0, 5)
         self.gridLayout_3.setColumnStretch(1, 3)
-        self.gridLayout_3.setColumnStretch(2, 3)
+        self.gridLayout_3.setColumnStretch(2, 1)
+        self.gridLayout_3.setColumnStretch(3, 1)
+        self.gridLayout_3.setColumnStretch(4, 1)
+        self.gridLayout_3.setColumnStretch(5, 3)
+        self.gridLayout_3.setColumnStretch(6, 3)
         self.verticalLayout_4.addLayout(self.gridLayout_3)
         self.verticalLayout_4.setStretch(0, 4)
         self.verticalLayout_4.setStretch(1, 2)
@@ -273,15 +310,16 @@ class Ui_Form(object):
         self.lbMachineLeader.setText(_translate("Form", "TextLabel"))
         self.label_2.setText(_translate("Form", "工序"))
         self.lbWorkSeq.setText(_translate("Form", "凹印"))
-        self.groupBox_2.setTitle(_translate("Form", "产品信息"))
+        self.groupBox_2.setTitle(_translate("Form", "产品废票信息"))
         self.label_8.setText(_translate("Form", "车号"))
         self.label_7.setText(_translate("Form", "开位"))
         self.label.setText(_translate("Form", "说明"))
         self.txtDescribe.setPlaceholderText(_translate("Form", "请输入说明"))
         self.lbCamera.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt; color:#19c80c;\">摄像头打开中。。。</span></p></body></html>"))
-        self.lbNumberpPic.setText(_translate("Form", "车号"))
         self.btnDetcCart.setText(_translate("Form", "识别车号"))
-        self.btnViewROITable.setText(_translate("Form", "ROI图查看"))
         self.btnUploadRIO.setText(_translate("Form", "上传废票截图"))
+        self.lbNumberpPic.setText(_translate("Form", "车号"))
+        self.btnUpLocal.setText(_translate("Form", "上传本地图片"))
+        self.btnViewROITable.setText(_translate("Form", "ROI图查看"))
 
 
