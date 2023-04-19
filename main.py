@@ -1,12 +1,13 @@
 import  sys,os
 import shelve
 from PyQt5 import QtGui
-from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction
+from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot, QDir
+from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction, \
+    QFileDialog
 from ui_mainWindow import Ui_Form
 from cameraThread import CameraThread
 from ViewImageWin import ViewImageWidget
-from PyQt5.QtGui import QPixmap, QIcon, QBrush, QCursor
+from PyQt5.QtGui import QPixmap, QIcon, QBrush, QCursor, QTransform
 from roiTableWindow import ViewROITableWin
 from paramSetupWindow import ParamSetupWin
 from cartROIdetct import  CartROIdetector
@@ -67,7 +68,7 @@ class MainWindow(QWidget):
         self.ui.lsImgROIWidget.customContextMenuRequested[QPoint].connect(self.rightMenuListWidget)
         h=self.ui.lsImgROIWidget.height()
         self.ui.lsImgROIWidget.setIconSize(QSize(200, h-50))
-        self.ui.lsImgROIWidget.itemClicked.connect(self.showImage)
+        self.ui.lsImgROIWidget.itemDoubleClicked.connect(self.showImage)
         self.lastItem=QListWidgetItem()
 
     def getInitParam(self):
@@ -87,16 +88,23 @@ class MainWindow(QWidget):
     def delImgListItem(self):
         currentImgIdx = self.ui.lsImgROIWidget.currentIndex().row()
         print("del img list item:",currentImgIdx)
-        del  self.listROI_fileName[currentImgIdx]
+        os.remove(self.listROI_fileName[currentImgIdx] + ".jpg")
+        del self.listROI_fileName[currentImgIdx]
         # currentItem = self.ui.lsImgROIWidget.currentItem()
         # self.ui.lsImgROIWidget.removeItemWidget(currentItem)
         self.ui.lsImgROIWidget.takeItem(currentImgIdx)  #删除listWidget里选择的item
-        self.freshImgListWidget(self.listROI_fileName)  #刷新listwidget
+        # self.freshImgListWidget(self.listROI_fileName)  #刷新listwidget
 
 
     def addListWidgetImageItem(self,pixImage,img_name):
         item = QListWidgetItem(QIcon(pixImage), img_name)
         self.ui.lsImgROIWidget.addItem(item)
+
+    def splitCartNum(self,cartNumStr):
+        producttype=cartNumStr[0]
+        cartNum=cartNumStr[1:4]
+        productId=cartNumStr[6:9]
+        return cartNum,productId
 
     def showImage(self):
         """
@@ -107,11 +115,11 @@ class MainWindow(QWidget):
         currentImgIdx = self.ui.lsImgROIWidget.currentIndex().row()  #use row() when icon排列 top to bottom
         imgFileName = self.listROI_fileName[currentImgIdx]
         self.imageViewer.show_label.setPixmap(QPixmap(imgFileName+".jpg"))
-        currentItem= self.ui.lsImgROIWidget.currentItem()
-        currentItem.setBackground(QBrush(Qt.darkGreen))
-        if self.lastItem !=currentItem:
-            self.lastItem.setBackground(QBrush())
-        self.lastItem=currentItem
+        # currentItem= self.ui.lsImgROIWidget.currentItem()
+        # currentItem.setBackground(QBrush(Qt.darkGreen))
+        # if self.lastItem !=currentItem:
+        #     self.lastItem.setBackground(QBrush())
+        # self.lastItem=currentItem
         self.imageViewer.show()
 
         # self.imageViewer.show_label.setText("self.ui.lsImgROIWidget.currentIndex()")
@@ -188,15 +196,22 @@ class MainWindow(QWidget):
                 dirName="img\\"+self.ui.editProductID.text()
                 if not os.path.isdir(dirName):    #当前目录是否存在
                     os.makedirs(dirName)
-                imgFileName=str(self.ui.editProductID.text()+"-"+self.ui.editK.text())
+                imgFileName=str(self.ui.editProductID.text()+"#"+self.ui.editK.text())
                 fileFullPath = dirName+"\\" + imgFileName
                 imgROI = self.frame.copy(startX, startPY, ROIw, ROIh)
-                imgROI.save(fileFullPath+".jpg","JPG",100) #创建ROI文件
-                self.listROI_fileName.append(fileFullPath)  #不带文件扩展名的目录+文件名列表
+                imgROI.save(fileFullPath+".jpg","JPG",100) #创建ROI文件，重名就覆盖
+                # 通过在文件列表里查重，判断ROI 开是否已经存在，存在，则替换listwidget里的Icon图，
+                if fileFullPath in self.listROI_fileName:
+                    listIndex=self.listROI_fileName.index(fileFullPath)
+                    item=self.ui.lsImgROIWidget.item(listIndex)
+                    item.setIcon(QIcon(QPixmap.fromImage(imgROI)))
+                    self.ui.lsImgROIWidget.repaint() #刷新列表
 
-                # imgROI=imgROI.scaled(w,h, Qt.KeepAspectRatio)
-                # 给水平Listwidget组件添加ROI list image
-                self.addListWidgetImageItem(QPixmap.fromImage(imgROI),imgFileName)
+                else:
+                    self.listROI_fileName.append(fileFullPath)  #不带文件扩展名的目录+文件名列表
+                    # imgROI=imgROI.scaled(w,h, Qt.KeepAspectRatio)
+                    # 给水平Listwidget组件添加ROI list image
+                    self.addListWidgetImageItem(QPixmap.fromImage(imgROI),imgFileName)
                 self.ui.editK.setText("")
         return super().eventFilter(o, evn)
 
@@ -298,6 +313,21 @@ class MainWindow(QWidget):
         #上传完删除图像文件
         print("上传。。。。")
 
+    @pyqtSlot()
+    def on_btnUpLocal_clicked(self):
+        '''
+        上传本地图片
+        :return:
+        '''
+        # curPath=QDir.currentPath()
+        curPath="C:\\Users\\Administrator\\Desktop"
+        filt="图片文件(*.jpg *.jpeg *.png);;所有文件(*.*);"
+        fileList,filtUsed=QFileDialog.getOpenFileNames(self,"选择一个图片文件",curPath,filt)
+        for i in range(len(fileList)):
+            fileName=(fileList[i])[:fileList[i].find(".")]
+            fileName=fileName.replace("/","\\")
+            self.listROI_fileName.append(fileName)
+
     def freshImgListWidget(self, imgFileList):
         '''
         刷新 img listwidget
@@ -322,13 +352,38 @@ class MainWindow(QWidget):
         图像反时针旋转90度
         :return:
         '''
-        pass
+        currentImgIdx = self.ui.lsImgROIWidget.currentIndex().row()
+        print("rotate img list item:", currentImgIdx)
+        if currentImgIdx == -1:
+            return
+        fileName = self.listROI_fileName[currentImgIdx] + '.jpg'
+        roiPix = QPixmap(fileName)
+        transfer = QTransform()
+        transfer.rotate(-90)
+        roiPix = roiPix.transformed(transfer)
+        roiPix.save(fileName)
+        self.freshImgListWidget(self.listROI_fileName)  # 刷新listwidget
+        self.ui.lsImgROIWidget.setCurrentRow(currentImgIdx)
 
+    @pyqtSlot()
     def on_btnRot_clicked(self):
         '''
-        图像顺时针旋转90度
+        图像顺时针旋转90度，其实旋转的是图像文件
         :return:
         '''
+        currentImgIdx = self.ui.lsImgROIWidget.currentIndex().row()
+        print("rotate img list item:", currentImgIdx)
+        if currentImgIdx==-1 :
+            return
+        fileName=self.listROI_fileName[currentImgIdx]+'.jpg'
+        roiPix=QPixmap(fileName)
+        transfer=QTransform()
+        transfer.rotate(90)
+        roiPix=roiPix.transformed(transfer)
+        roiPix.save(fileName)
+        self.freshImgListWidget(self.listROI_fileName)  # 刷新listwidget，重新加载图像文件列表
+        self.ui.lsImgROIWidget.setCurrentRow(currentImgIdx)
+
     def closeEvent(self,event):
         print("关闭主程序窗口")
         self.th.cap.release()
@@ -339,6 +394,7 @@ class MainWindow(QWidget):
 if __name__=="__main__":
     app=QApplication(sys.argv)
     mainWin=MainWindow()
+
     mainWin.show()
 
     sys.exit(app.exec_())
