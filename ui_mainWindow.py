@@ -20,8 +20,22 @@ class Ui_Form(object):
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label_4 = QtWidgets.QLabel(Form)
+        self.label_4.setMinimumSize(QtCore.QSize(300, 70))
+        self.label_4.setStyleSheet("image: url(:/img/icon/logo.png);\n"
+"background-color: qlineargradient(spread:pad, x1:0.0113636, y1:0.011, x2:1, y2:0, stop:0 rgba(26, 29, 60, 255), stop:0.568182 rgba(57, 94, 150, 255), stop:0.75 rgba(57, 94, 150, 255), stop:1 rgba(26, 29, 60, 255));\n"
+"\n"
+"border-radius:5px;\n"
+" \n"
+" ")
+        self.label_4.setText("")
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_2.addWidget(self.label_4)
         self.label_6 = QtWidgets.QLabel(Form)
-        self.label_6.setStyleSheet("font: 20pt \"Arial\";")
+        self.label_6.setStyleSheet("font: 75 25pt \"微软雅黑\";\n"
+"color: rgb(4, 170, 255);\n"
+"\n"
+" ")
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_2.addWidget(self.label_6)
@@ -32,12 +46,15 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.btnSetup.sizePolicy().hasHeightForWidth())
         self.btnSetup.setSizePolicy(sizePolicy)
         self.btnSetup.setMinimumSize(QtCore.QSize(16, 16))
-        self.btnSetup.setMaximumSize(QtCore.QSize(72, 72))
+        self.btnSetup.setMaximumSize(QtCore.QSize(64, 64))
         self.btnSetup.setBaseSize(QtCore.QSize(32, 32))
+        self.btnSetup.setStyleSheet("image: url(:/icon/icon/setup.ico);")
+        self.btnSetup.setText("")
         self.btnSetup.setObjectName("btnSetup")
         self.horizontalLayout_2.addWidget(self.btnSetup)
-        self.horizontalLayout_2.setStretch(0, 12)
-        self.horizontalLayout_2.setStretch(1, 1)
+        self.horizontalLayout_2.setStretch(0, 1)
+        self.horizontalLayout_2.setStretch(1, 12)
+        self.horizontalLayout_2.setStretch(2, 1)
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
@@ -244,6 +261,7 @@ class Ui_Form(object):
         self.btnCounterRot.setSizePolicy(sizePolicy)
         self.btnCounterRot.setMinimumSize(QtCore.QSize(16, 16))
         self.btnCounterRot.setMaximumSize(QtCore.QSize(72, 72))
+        self.btnCounterRot.setStyleSheet("")
         self.btnCounterRot.setText("")
         self.btnCounterRot.setObjectName("btnCounterRot")
         self.gridLayout_3.addWidget(self.btnCounterRot, 1, 2, 1, 1)
@@ -261,7 +279,7 @@ class Ui_Form(object):
         self.btnUpLocal.setObjectName("btnUpLocal")
         self.gridLayout_3.addWidget(self.btnUpLocal, 1, 6, 1, 1)
         self.btnViewROITable = QtWidgets.QPushButton(Form)
-        self.btnViewROITable.setStyleSheet(" QPushButton{background-color: rgb(0, 255, 0);}\n"
+        self.btnViewROITable.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
 ":pressed\n"
 "{ \n"
 " padding-left:3px;\n"
@@ -270,8 +288,9 @@ class Ui_Form(object):
 ":hover\n"
 "{\n"
 " color:rgb(75, 75, 75);}\n"
+" \n"
 "\n"
-" ")
+"")
         self.btnViewROITable.setObjectName("btnViewROITable")
         self.gridLayout_3.addWidget(self.btnViewROITable, 1, 1, 1, 1)
         self.btnRot = QtWidgets.QPushButton(Form)
@@ -290,7 +309,7 @@ class Ui_Form(object):
         self.gridLayout_3.setColumnStretch(5, 3)
         self.gridLayout_3.setColumnStretch(6, 3)
         self.verticalLayout_4.addLayout(self.gridLayout_3)
-        self.verticalLayout_4.setStretch(0, 4)
+        self.verticalLayout_4.setStretch(0, 5)
         self.verticalLayout_4.setStretch(1, 2)
         self.horizontalLayout.addLayout(self.verticalLayout_4)
         self.horizontalLayout.setStretch(0, 2)
@@ -303,8 +322,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_6.setText(_translate("Form", "可视化废票传递信息"))
-        self.btnSetup.setText(_translate("Form", "1"))
+        self.label_6.setText(_translate("Form", "可视化废票信息传递系统"))
         self.groupBox.setTitle(_translate("Form", "工序信息"))
         self.label_3.setText(_translate("Form", "机长"))
         self.lbMachineLeader.setText(_translate("Form", "TextLabel"))
@@ -323,3 +341,4 @@ class Ui_Form(object):
         self.btnViewROITable.setText(_translate("Form", "ROI图查看"))
 
 
+import pic_rc

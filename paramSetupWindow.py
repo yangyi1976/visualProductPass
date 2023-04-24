@@ -3,12 +3,13 @@ import shelve
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtCore import Qt, pyqtSlot, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, QSize ,pyqtSignal
 from ui_pramaSetup import Ui_winParamSetup
 from infoMessageBox import InfoMessageBox
 import cv2
 
 class ParamSetupWin(QWidget):
+    rebootSignal=pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_winParamSetup()
@@ -25,6 +26,7 @@ class ParamSetupWin(QWidget):
         self.ui.btnSwitch.setIconSize(QSize(32, 32))
         self.cameraModified=False
         self.initParamData()
+
 
 
     def getCameraCount(self):
@@ -54,6 +56,11 @@ class ParamSetupWin(QWidget):
         self.ui.lnOcuppyMin.setText(shelf['ocuppyMin'])
         self.ui.lnOcuppyMax.setText(shelf['ocuppyMax'])
         self.ui.comCameraIndx.setCurrentText(shelf['cameraIndex'])
+        self.ui.lnFilesStoreDays.setText(shelf['storeFilesDays'])
+        self.ui.lnUploadServIP.setText(shelf['upload_servIp'])
+        self.ui.lnUploadServPort.setText(shelf['upload_servPort'])
+        self.ui.lnUploadServAPI.setText(shelf['upload_servAPI'])
+        shelf.close()
 
     @pyqtSlot(int)
     def on_comCameraIndx_currentIndexChanged(self):
@@ -70,7 +77,12 @@ class ParamSetupWin(QWidget):
         shelf['ocuppyMin'] =  self.ui.lnOcuppyMin.text()
         shelf['ocuppyMax'] =  self.ui.lnOcuppyMax.text()
         shelf['cameraIndex']=self.ui.comCameraIndx.currentText()
+        shelf['storeFilesDays']=self.ui.lnFilesStoreDays.text()
+        shelf['upload_servIp']=self.ui.lnUploadServIP.text()
+        shelf['upload_servPort']=self.ui.lnUploadServPort.text()
+        shelf['upload_servAPI']=self.ui.lnUploadServAPI.text()
         # self.close()
+        # self.infoBox.info("已经保存参数")
 
     @pyqtSlot()
     def on_btnDefault_clicked(self):
@@ -86,6 +98,8 @@ class ParamSetupWin(QWidget):
             shelf['ocuppyMin'] = '7'
             shelf['ocuppyMax'] = '11'
             shelf['cameraIndex']='0'
+            shelf['storeFilesDays'] = '90'
+            shelf['upload_servAPI']='/'
             shelf.close()
             self.initParamData()
 
@@ -107,12 +121,19 @@ class ParamSetupWin(QWidget):
 
 
     def closeEvent(self, QCloseEvent):
+
+        isReBoot= False
         if self.cameraModified:
+            isReBoot = True
             reply = self.infoBox.warn("摄像头参数修改，需重启程序生效")
         else:
             reply = self.infoBox.warn("确定已经保存修改？")
-        if reply == InfoMessageBox.Yes:
+        if reply == InfoMessageBox.Yes and not isReBoot:
             self.on_btnSave_clicked()
+            self.close()
+        elif reply == InfoMessageBox.Yes and isReBoot:
+            self.on_btnSave_clicked()
+            self.rebootSignal.emit()
             self.close()
         else:
             QCloseEvent.ignore()
@@ -122,8 +143,8 @@ class ParamSetupWin(QWidget):
 if __name__ == "__main__":
 
 
-    app = QApplication(sys.argv)
+    app1 = QApplication(sys.argv)
     mainWin = ParamSetupWin()
     mainWin.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app1.exec_())

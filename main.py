@@ -1,38 +1,45 @@
 import  sys,os
 import shelve
 from PyQt5 import QtGui
-from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot, QDir
+from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot,  QProcess
 from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction, \
     QFileDialog
 from ui_mainWindow import Ui_Form
 from cameraThread import CameraThread
+from delFileByDaysThread import DelFileByDaysThread
 from ViewImageWin import ViewImageWidget
-from PyQt5.QtGui import QPixmap, QIcon, QBrush, QCursor, QTransform
+from PyQt5.QtGui import QPixmap, QIcon, QCursor, QTransform
 from roiTableWindow import ViewROITableWin
 from paramSetupWindow import ParamSetupWin
 from cartROIdetct import  CartROIdetector
 import  cv2
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+
+
 class MainWindow(QWidget):
     def __init__(self,parent=None):
+        if hasattr(sys, 'frozen'):
+            os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
         super().__init__(parent)
         self.ui=Ui_Form()
         self.ui.setupUi(self)
         self.ui.lbCamera.setMouseTracking(True)
         self.ui.lbCamera.installEventFilter(self) #安装事件监听器
         self.ui.btnSetup.setText("")
-        self.ui.btnSetup.setIcon(QIcon("icon/setup.ico"))
-        self.ui.btnSetup.setIconSize(QSize(32,32))
-        self.ui.btnCounterRot.setIcon(QIcon("icon/rotate-left.ico"))
+        #QIcon来自资源文件pic_rc.py,路径格式:icon/icon/*.ico,也可以之前来自ico文件icon/*.ico
+        self.ui.btnSetup.setIcon(QIcon(":icon/icon/setup.ico"))
+        self.ui.btnSetup.setIconSize(QSize(64,64))
+        self.ui.btnCounterRot.setIcon(QIcon(":icon/icon/rotate-left.ico"))
         self.ui.btnCounterRot.setIconSize(QSize(32,32))
-        self.ui.btnRot.setIcon(QIcon("icon/rotate-right.ico"))
+        self.ui.btnRot.setIcon(QIcon(":icon/icon/rotate-right.ico"))
         self.ui.btnRot.setIconSize(QSize(32, 32))
-        self.ui.btnViewROITable.setIcon(QIcon("icon/winprops.ico"))
+        self.ui.btnViewROITable.setIcon(QIcon(":icon/icon/winprops.ico"))
         self.ui.btnViewROITable.setIconSize(QSize(32, 32))
-        self.ui.btnUploadRIO.setIcon(QIcon("icon/remote.ico"))
+        self.ui.btnUploadRIO.setIcon(QIcon(":icon/icon/remote.ico"))
         self.ui.btnUploadRIO.setIconSize(QSize(32, 32))
-        self.ui.btnUpLocal.setIcon(QIcon("icon/kwrite.ico"))
+        self.ui.btnUpLocal.setIcon(QIcon(":icon/icon/kwrite.ico"))
         self.ui.btnUpLocal.setIconSize(QSize(32, 32))
         # self.ui.lbCamera.setScaledContents(True)
 
@@ -53,6 +60,9 @@ class MainWindow(QWidget):
         self.th = CameraThread(self.cap)
         self.th.flashPixmap.connect(self.setImage)
         self.th.start()
+        #删除文件存储时间大于指定天数的文件夹
+        self.delFilesTh=DelFileByDaysThread(self.storeFilesDays)
+        self.delFilesTh.start()
         self.showMaximized()
         self.setWindowTitle("废票信息可视化传递")
         self.initListWidget()  #初始化水平图片显示组件
@@ -75,7 +85,10 @@ class MainWindow(QWidget):
         shelf = shelve.open('cfg')
         self.servIP = shelf['ORCServer_IP'] + ":8089"
         self.cameraIndex=int(shelf['cameraIndex'])
+        self.storeFilesDays=int(shelf['storeFilesDays'])
+        self.uploadUrl=shelf['upload_servIp']+":"+shelf['upload_servPort']+shelf['upload_servAPI']
         shelf.close()
+
 
     def rightMenuListWidget(self):
         rightMenu = QMenu(self.ui.lsImgROIWidget)
@@ -310,7 +323,9 @@ class MainWindow(QWidget):
 
     @pyqtSlot()
     def on_btnUploadRIO_clicked(self):
-        #上传完删除图像文件
+        #上传完清除listWidget列表
+        self.listROI_fileName=[]
+        self.ui.lsImgROIWidget.clear()
         print("上传。。。。")
 
     @pyqtSlot()
@@ -344,7 +359,18 @@ class MainWindow(QWidget):
     @pyqtSlot()
     def on_btnSetup_clicked(self):
         self.paramSetupWin=ParamSetupWin()
+        self.paramSetupWin.rebootSignal.connect(self.rebootApp)
         self.paramSetupWin.show()
+
+    def rebootApp(self):
+        print("reboot.......")
+        # python = sys.executable
+        # print(python)
+        # os.execl(python,python,   *sys.argv)
+        QApplication.quit()
+        status = QProcess.startDetached(sys.executable, sys.argv)
+        print(status)
+
 
     @pyqtSlot()
     def on_btnCounterRot_clicked(self):
@@ -392,9 +418,18 @@ class MainWindow(QWidget):
 
 
 if __name__=="__main__":
-    app=QApplication(sys.argv)
-    mainWin=MainWindow()
 
-    mainWin.show()
+    # app=QApplication(sys.argv)
+    # mainWin=MainWindow()
+    #
+    # mainWin.show()
+    #
+    # sys.exit(app.exec_())
+    current_exit_code = 2023
+    while current_exit_code == 2023:
+        app = QApplication(sys.argv)
+        main_window = MainWindow()
+        main_window.show()
+        sys.exit(app.exec_())
 
-    sys.exit(app.exec_())
+

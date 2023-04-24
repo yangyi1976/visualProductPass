@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>971</width>
-    <height>601</height>
+    <height>676</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,10 +57,10 @@ text-align:center;
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>260</y>
+     <x>470</x>
+     <y>360</y>
      <width>381</width>
-     <height>221</height>
+     <height>211</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -165,8 +165,8 @@ border-top:1px solid white;
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>510</y>
+     <x>260</x>
+     <y>590</y>
      <width>388</width>
      <height>81</height>
     </rect>
@@ -247,10 +247,10 @@ border-top:1px solid white;
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>260</y>
+     <x>50</x>
+     <y>360</y>
      <width>351</width>
-     <height>221</height>
+     <height>211</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -425,6 +425,9 @@ text-aling:center;</string>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
     <item>
      <widget class="QLabel" name="label_3">
       <property name="styleSheet">
@@ -461,7 +464,7 @@ text-aling:center;</string>
     <rect>
      <x>50</x>
      <y>120</y>
-     <width>411</width>
+     <width>391</width>
      <height>51</height>
     </rect>
    </property>
@@ -476,7 +479,7 @@ text-aling:center;</string>
      <number>20</number>
     </property>
     <property name="leftMargin">
-     <number>20</number>
+     <number>2</number>
     </property>
     <property name="rightMargin">
      <number>40</number>
@@ -549,6 +552,139 @@ background-color: rgb(48, 48, 85);
         <string>6</string>
        </property>
       </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>51</x>
+     <y>241</y>
+     <width>401</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <item>
+     <widget class="QLabel" name="label_8">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>上传Server IP:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lnUploadServIP">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="inputMask">
+       <string>000.000.000.000</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>240</y>
+     <width>281</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <item>
+     <widget class="QLabel" name="label_10">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>上传Server Port：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lnUploadServPort"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>120</y>
+     <width>311</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
+    <item>
+     <widget class="QLabel" name="label_12">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>废票图片存储时间：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lnFilesStoreDays"/>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_13">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>天</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>51</x>
+     <y>300</y>
+     <width>701</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_7">
+    <item>
+     <widget class="QLabel" name="label_11">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>上传Server API:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lnUploadServAPI">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
      </widget>
     </item>
    </layout>

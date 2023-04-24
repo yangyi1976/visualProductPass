@@ -20,14 +20,41 @@ font: 75 14pt &quot;微软雅黑&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="12,1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,12,1">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">image: url(:/img/icon/logo.png);
+background-color: qlineargradient(spread:pad, x1:0.0113636, y1:0.011, x2:1, y2:0, stop:0 rgba(26, 29, 60, 255), stop:0.568182 rgba(57, 94, 150, 255), stop:0.75 rgba(57, 94, 150, 255), stop:1 rgba(26, 29, 60, 255));
+
+border-radius:5px;
+ 
+ </string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="margin">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QLabel" name="label_6">
        <property name="styleSheet">
-        <string notr="true">font: 20pt &quot;Arial&quot;;</string>
+        <string notr="true">font: 75 25pt &quot;微软雅黑&quot;;
+color: rgb(4, 170, 255);
+
+ </string>
        </property>
        <property name="text">
-        <string>可视化废票传递信息</string>
+        <string>可视化废票信息传递系统</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -50,8 +77,8 @@ font: 75 14pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>72</width>
-         <height>72</height>
+         <width>64</width>
+         <height>64</height>
         </size>
        </property>
        <property name="baseSize">
@@ -60,8 +87,11 @@ font: 75 14pt &quot;微软雅黑&quot;;</string>
          <height>32</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true">image: url(:/icon/icon/setup.ico);</string>
+       </property>
        <property name="text">
-        <string>1</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -340,7 +370,7 @@ font: 29pt &quot;微软雅黑&quot;;</string>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="4,2">
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="5,2">
        <item>
         <widget class="QLabel" name="lbCamera">
          <property name="styleSheet">
@@ -442,6 +472,9 @@ background-color: rgb(148, 148, 148);</string>
              <height>72</height>
             </size>
            </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -469,7 +502,7 @@ background-color: rgb(148, 148, 148);</string>
          <item row="1" column="1">
           <widget class="QPushButton" name="btnViewROITable">
            <property name="styleSheet">
-            <string notr="true"> QPushButton{background-color: rgb(0, 255, 0);}
+            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);}
 :pressed
 { 
  padding-left:3px;
@@ -478,8 +511,9 @@ background-color: rgb(148, 148, 148);</string>
 :hover
 {
  color:rgb(75, 75, 75);}
+ 
 
- </string>
+</string>
            </property>
            <property name="text">
             <string>ROI图查看</string>
@@ -526,6 +560,8 @@ background-color: rgb(148, 148, 148);</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="pic.qrc"/>
+ </resources>
  <connections/>
 </ui>

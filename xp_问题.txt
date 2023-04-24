@@ -1,0 +1,15 @@
+xp
+python中使用cv2.findContours返回值too many values to unpack (expected 2)错误如何解决
+具体原因： opencv-python 版本还有一定关系，4.2的上面就行。3.4.2的得改成下面。
+
+解决方法，将
+
+contours, hierarchy = cv2.findContours(binary,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE) 
+改成
+
+binary, contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+ 
+videocapture(0,cv2.cap_dshow) 改为（0+cv2.cap_dshow)
+
+安装包：
+1，安装opencv -python ，3.2.0.8，另外，pip版本要用python34环境，不是venv环境里的，可以把opencv-python 3.2.0.8 ，拷贝到venv环境里

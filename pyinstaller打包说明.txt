@@ -1,0 +1,14 @@
+python 3.4.4的打包 使用pyinstaller3.2.1来进行打包。
+pyinstaller3.2.1需要单独安装才能使用，安装到python3.4的虚拟环境里。pyinstaller.py位于F:\PycharmProjects\pp_ocr_py34\venv\Scripts\pyinstaller_3.2.1下。
+
+使用方法： 打包成一个exe
+python.exe venv\Scripts\pyinstaller_3.2.1\pyinstaller.py -F -w  \main.py
+如果在pyinstaller安装路径下运行，使用   python.exe pyinstaller.py -F -w  F:\PycharmProjects\pp_ocr_py34\main.py
+
+或者：打包生成多个依赖文件
+python.exe venv\Scripts\pyinstaller_3.2.1\pyinstaller.py -D -w  main.py
+
+打包好的文件位于：dist文件夹下。
+如果在pyinstller安装路径下打包，则位于F:\PycharmProjects\pp_ocr_py34\venv\Scripts\pyinstaller_3.2.1\main\dist\main下,
+
+在实际运行的时候，要将cfg配置文件和icon文件夹拷贝到dist\main下

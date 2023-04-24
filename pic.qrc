@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>icon/del_can.ico</file>
+    <file>icon/del_x.ico</file>
+    <file>icon/greenDBArrow.ico</file>
+    <file>icon/kpager.ico</file>
+    <file>icon/kwrite.ico</file>
+    <file>icon/remote.ico</file>
+    <file>icon/rotate-left.ico</file>
+    <file>icon/rotate-right.ico</file>
+    <file>icon/setup.ico</file>
+    <file>icon/winprops.ico</file>
+  </qresource>
+  <qresource prefix="img">
+    <file>icon/logo.png</file>
+  </qresource>
+</RCC>

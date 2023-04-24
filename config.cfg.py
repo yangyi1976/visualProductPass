@@ -9,6 +9,10 @@ shelf['cameraHeight'] ='1600'
 shelf['ocuppyMin'] ='7'
 shelf['ocuppyMax']='11'
 shelf['cameraIndex']='0'
+shelf['storeFilesDays']='90'
+shelf['upload_servIp']='10.8.0.0'
+shelf['upload_servPort']='80'
+shelf['upload_servAPI']='/upload/'
 
 shelf.close()
 

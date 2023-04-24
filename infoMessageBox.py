@@ -9,6 +9,8 @@ class InfoMessageBox(QMessageBox):
     def warn(self,str):
         return self.warning(self, "警告", str, QMessageBox.No | QMessageBox.Yes)
 
+    def info(self, str):
+        return self.information(self, "消息", str,  QMessageBox.Ok)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

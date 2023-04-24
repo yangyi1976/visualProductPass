@@ -54,7 +54,6 @@ class ViewROITableWin(QWidget):
             j = k % 4   # 取余数
             # item = QTableWidgetItem()
             # item.setFlags(Qt.ItemIsEnabled)  # 用户点击时表格时，图片被选中
-            # icon = QIcon("img\\a004.jpg")
             # item.setIcon(QApplication.style().standardIcon(60))
             self.cellDisplayImage(i,j,k)
 

@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 # Read image
 image = cv2.imread(r"F:\PycharmProjects\pp_ocr_py34\img\capture_img 3386.jpg")
