@@ -1,6 +1,6 @@
 xp
 python中使用cv2.findContours返回值too many values to unpack (expected 2)错误如何解决
-具体原因： opencv-python 版本还有一定关系，4.2的上面就行。3.4.2的得改成下面。
+具体原因： opencv-python 版本有一定关系，4.2的上面就行。3.4.2的得改成下面。
 
 解决方法，将
 
@@ -13,3 +13,14 @@ videocapture(0,cv2.cap_dshow) 改为（0+cv2.cap_dshow)
 
 安装包：
 1，安装opencv -python ，3.2.0.8，另外，pip版本要用python34环境，不是venv环境里的，可以把opencv-python 3.2.0.8 ，拷贝到venv环境里
+2.要在xp环境下重新打包。
+3.需要拷贝配置文件
+
+
+在win10下打包：
+使用pycharm下的pp_ocr_py34的虚拟环境 venv来打包：
+(venv) F:\PycharmProjects\pp_ocr_py34> python venv\Scripts\pyinstaller_3.2.1\pyinstaller.py -F  main.py
+
+不加-w参数，可以出现控制台窗口，这样，就可以看到调试信息。
+-D  打包成依赖多个文件
+-F  打包成一个文件，

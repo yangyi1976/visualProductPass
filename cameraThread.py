@@ -16,6 +16,29 @@ class CameraThread(QThread):#采用线程来播放视频
     def __del__(self):
         print("拍照线程析构。。。。。")
 
+    def setCameraWH(self,w,h):
+        '''
+        设置摄像头原始分辨率
+        :param w:
+        :param h:
+        :return:
+        '''
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(w))
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(h))
+
+    # def setScreenWH(self,w,h):
+    #     self.screenW=w
+    #     self.screenH=h
+    def setVideoSize(self,w,h):
+        '''
+        根据label image控件的尺寸设置视频显示尺寸。
+        :param w: ui.lbCamera控件的宽
+        :param h:
+        :return:
+        '''
+        self.videoW=w
+        self.videoH=h
+        # self.videoW=h*16/9
     def cartNumCapture(self):
        '''
        车号图片截图
@@ -37,7 +60,7 @@ class CameraThread(QThread):#采用线程来播放视频
                 rgbImage = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
                 # rgbImage = cv2.flip(rgbImage, 1)  #沿Y轴图像反转
                 convertToQtFormat = QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0], QImage.Format_RGB888)#在这里可以对每帧图像进行处理，
-                img = convertToQtFormat.scaled(1024, 540, Qt.KeepAspectRatio)
+                img = convertToQtFormat.scaled(self.videoW, self.videoH, Qt.KeepAspectRatio)
                 self.flashPixmap.emit(img)
                 time.sleep(0.1) #控制视频播放的速度
             else:

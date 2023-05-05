@@ -46,6 +46,7 @@ class ParamSetupWin(QWidget):
 
 
 
+
     def initParamData(self):
         shelf = shelve.open('cfg')
         self.ui.lnOcrServIP.setText(shelf['ORCServer_IP'])
@@ -66,6 +67,15 @@ class ParamSetupWin(QWidget):
     def on_comCameraIndx_currentIndexChanged(self):
         self.cameraModified=True
 
+    @pyqtSlot(str)
+    def on_lnCamraWidth_textEdited(self):
+        self.cameraModified =True
+        print("width modified!")
+
+    @pyqtSlot(str)
+    def on_lnCamraHeight_textEdited(self):
+        self.cameraModified = True
+        print("Height modified!")
     @pyqtSlot()
     def on_btnSave_clicked(self):
         shelf = shelve.open('cfg')
@@ -93,8 +103,8 @@ class ParamSetupWin(QWidget):
             shelf['ORCServer_IP'] = '172.16.18.127'
             shelf['kernelWidth'] = '2'
             shelf['kernelHeight'] = '5'
-            shelf['cameraWidth'] = '1900'
-            shelf['cameraHeight'] = '1600'
+            shelf['cameraWidth'] = '1920'
+            shelf['cameraHeight'] = '1080'
             shelf['ocuppyMin'] = '7'
             shelf['ocuppyMax'] = '11'
             shelf['cameraIndex']='0'

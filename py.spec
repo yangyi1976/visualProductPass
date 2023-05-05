@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['main.py'],
+a = Analysis(['py', 'main.py'],
              pathex=['F:\\PycharmProjects\\pp_ocr_py34'],
              binaries=[],
              datas=[],
@@ -18,16 +18,11 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          exclude_binaries=True,
-          name='main',
+          a.binaries,
+          a.zipfiles,
+          a.datas,
+          name='py',
           debug=False,
           strip=False,
           upx=True,
           console=False )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=True,
-               name='main')

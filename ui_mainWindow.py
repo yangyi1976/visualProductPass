@@ -15,7 +15,7 @@ class Ui_Form(object):
         Form.resize(1280, 768)
         Form.setStyleSheet("background-color: rgb(26, 29, 60);\n"
 "color: rgb(255, 255, 255);\n"
-"font: 75 14pt \"微软雅黑\";")
+"font: 18pt \"黑体\"")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -32,7 +32,7 @@ class Ui_Form(object):
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_2.addWidget(self.label_4)
         self.label_6 = QtWidgets.QLabel(Form)
-        self.label_6.setStyleSheet("font: 75 25pt \"微软雅黑\";\n"
+        self.label_6.setStyleSheet("font: 75 40pt \"黑体\";\n"
 "color: rgb(4, 170, 255);\n"
 "\n"
 " ")
@@ -48,7 +48,8 @@ class Ui_Form(object):
         self.btnSetup.setMinimumSize(QtCore.QSize(16, 16))
         self.btnSetup.setMaximumSize(QtCore.QSize(64, 64))
         self.btnSetup.setBaseSize(QtCore.QSize(32, 32))
-        self.btnSetup.setStyleSheet("image: url(:/icon/icon/setup.ico);")
+        self.btnSetup.setStyleSheet("image: url(:/icon/icon/setup.ico);\n"
+"border-radius:7px;")
         self.btnSetup.setText("")
         self.btnSetup.setObjectName("btnSetup")
         self.horizontalLayout_2.addWidget(self.btnSetup)
@@ -81,7 +82,8 @@ class Ui_Form(object):
         self.lbMachineLeader.setStyleSheet("background-color: rgb(48, 48, 85);\n"
 "border-radius:7px;\n"
 "border:1px solid green;\n"
-"color: rgb(0, 255, 255);")
+"color: rgb(0, 255, 255);\n"
+"font: 36pt \"幼圆\";")
         self.lbMachineLeader.setAlignment(QtCore.Qt.AlignCenter)
         self.lbMachineLeader.setObjectName("lbMachineLeader")
         self.gridLayout_4.addWidget(self.lbMachineLeader, 2, 1, 1, 1)
@@ -104,7 +106,7 @@ class Ui_Form(object):
         self.lbWorkSeq.setSizePolicy(sizePolicy)
         self.lbWorkSeq.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.lbWorkSeq.setStyleSheet("background-color: rgb(48, 48, 85);\n"
-"font: 20pt \"微软雅黑\";\n"
+"font: 36pt \"幼圆\";\n"
 "color: rgb(0, 255, 255);\n"
 " \n"
 "border-radius:7px;\n"
@@ -149,7 +151,7 @@ class Ui_Form(object):
         self.editProductID.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 " \n"
 "color: rgb(81, 81, 81);\n"
-"font: 29pt \"微软雅黑\";")
+"font: 36pt \"黑体\";")
         self.editProductID.setObjectName("editProductID")
         self.gridLayout_2.addWidget(self.editProductID, 1, 1, 1, 1)
         self.editK = QtWidgets.QLineEdit(self.groupBox_2)
@@ -162,7 +164,7 @@ class Ui_Form(object):
         self.editK.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 " \n"
 "color: rgb(81, 81, 81);\n"
-"font: 29pt \"微软雅黑\";")
+"font: 36pt \"黑体\";")
         self.editK.setCursorMoveStyle(QtCore.Qt.VisualMoveStyle)
         self.editK.setObjectName("editK")
         self.gridLayout_2.addWidget(self.editK, 2, 1, 1, 1)
@@ -230,7 +232,10 @@ class Ui_Form(object):
         self.btnDetcCart.setObjectName("btnDetcCart")
         self.gridLayout_3.addWidget(self.btnDetcCart, 1, 0, 1, 1)
         self.btnUploadRIO = QtWidgets.QPushButton(Form)
-        self.btnUploadRIO.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
+        self.btnUploadRIO.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);\n"
+"border-radius:7px;\n"
+"height:35px;\n"
+"}\n"
 "\n"
 ":pressed\n"
 "{ \n"
@@ -266,7 +271,10 @@ class Ui_Form(object):
         self.btnCounterRot.setObjectName("btnCounterRot")
         self.gridLayout_3.addWidget(self.btnCounterRot, 1, 2, 1, 1)
         self.btnUpLocal = QtWidgets.QPushButton(Form)
-        self.btnUpLocal.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
+        self.btnUpLocal.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);\n"
+"border-radius:7px;\n"
+"\n"
+"}\n"
 ":pressed\n"
 "{ \n"
 " padding-left:3px;\n"
@@ -279,7 +287,10 @@ class Ui_Form(object):
         self.btnUpLocal.setObjectName("btnUpLocal")
         self.gridLayout_3.addWidget(self.btnUpLocal, 1, 6, 1, 1)
         self.btnViewROITable = QtWidgets.QPushButton(Form)
-        self.btnViewROITable.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);}\n"
+        self.btnViewROITable.setStyleSheet("QPushButton{background-color: rgb(0, 255, 0);\n"
+"border-radius:7px;\n"
+"height:35px;\n"
+"}\n"
 ":pressed\n"
 "{ \n"
 " padding-left:3px;\n"
@@ -288,7 +299,7 @@ class Ui_Form(object):
 ":hover\n"
 "{\n"
 " color:rgb(75, 75, 75);}\n"
-" \n"
+"\n"
 "\n"
 "")
         self.btnViewROITable.setObjectName("btnViewROITable")
@@ -333,7 +344,7 @@ class Ui_Form(object):
         self.label_7.setText(_translate("Form", "开位"))
         self.label.setText(_translate("Form", "说明"))
         self.txtDescribe.setPlaceholderText(_translate("Form", "请输入说明"))
-        self.lbCamera.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt; color:#19c80c;\">摄像头打开中。。。</span></p></body></html>"))
+        self.lbCamera.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt; color:#19c80c;\">未发现摄像头。。。</span></p></body></html>"))
         self.btnDetcCart.setText(_translate("Form", "识别车号"))
         self.btnUploadRIO.setText(_translate("Form", "上传废票截图"))
         self.lbNumberpPic.setText(_translate("Form", "车号"))

@@ -40,7 +40,7 @@ class CartROIdetector(object ):
         :param op_image:
         :return:
         '''
-        contours, hierarchy = cv.findContours(op_image, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+        img,contours, hierarchy = cv.findContours(op_image, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
         # 绘制矩形包围框，得到轮廓的坐标
         max_x, max_y, max_w, max_h = cv.boundingRect(contours[0])
         for c in contours:

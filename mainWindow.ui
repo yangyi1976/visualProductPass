@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(26, 29, 60);
 color: rgb(255, 255, 255);
-font: 75 14pt &quot;微软雅黑&quot;;</string>
+font: 18pt &quot;黑体&quot;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
@@ -48,7 +48,7 @@ border-radius:5px;
      <item>
       <widget class="QLabel" name="label_6">
        <property name="styleSheet">
-        <string notr="true">font: 75 25pt &quot;微软雅黑&quot;;
+        <string notr="true">font: 75 40pt &quot;黑体&quot;;
 color: rgb(4, 170, 255);
 
  </string>
@@ -88,7 +88,8 @@ color: rgb(4, 170, 255);
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">image: url(:/icon/icon/setup.ico);</string>
+        <string notr="true">image: url(:/icon/icon/setup.ico);
+border-radius:7px;</string>
        </property>
        <property name="text">
         <string/>
@@ -141,7 +142,8 @@ color: rgb(4, 170, 255);
              <string notr="true">background-color: rgb(48, 48, 85);
 border-radius:7px;
 border:1px solid green;
-color: rgb(0, 255, 255);</string>
+color: rgb(0, 255, 255);
+font: 36pt &quot;幼圆&quot;;</string>
             </property>
             <property name="text">
              <string>TextLabel</string>
@@ -203,7 +205,7 @@ font: 75 14pt &quot;微软雅黑&quot;;
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(48, 48, 85);
-font: 20pt &quot;微软雅黑&quot;;
+font: 36pt &quot;幼圆&quot;;
 color: rgb(0, 255, 255);
  
 border-radius:7px;
@@ -287,7 +289,7 @@ border:1px solid green;</string>
                <string notr="true">background-color: rgb(255, 255, 255);
  
 color: rgb(81, 81, 81);
-font: 29pt &quot;微软雅黑&quot;;</string>
+font: 36pt &quot;黑体&quot;;</string>
               </property>
              </widget>
             </item>
@@ -306,7 +308,7 @@ font: 29pt &quot;微软雅黑&quot;;</string>
                <string notr="true">background-color: rgb(255, 255, 255);
  
 color: rgb(81, 81, 81);
-font: 29pt &quot;微软雅黑&quot;;</string>
+font: 36pt &quot;黑体&quot;;</string>
               </property>
               <property name="cursorMoveStyle">
                <enum>Qt::VisualMoveStyle</enum>
@@ -378,7 +380,7 @@ font: 29pt &quot;微软雅黑&quot;;</string>
 background-color: rgb(0, 0, 0);</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#19c80c;&quot;&gt;摄像头打开中。。。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#19c80c;&quot;&gt;未发现摄像头。。。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -415,7 +417,10 @@ color: rgb(75, 75, 75);}</string>
          <item row="1" column="5">
           <widget class="QPushButton" name="btnUploadRIO">
            <property name="styleSheet">
-            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);}
+            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);
+border-radius:7px;
+height:35px;
+}
 
 :pressed
 { 
@@ -483,7 +488,10 @@ background-color: rgb(148, 148, 148);</string>
          <item row="1" column="6">
           <widget class="QPushButton" name="btnUpLocal">
            <property name="styleSheet">
-            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);}
+            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);
+border-radius:7px;
+
+}
 :pressed
 { 
  padding-left:3px;
@@ -502,7 +510,10 @@ background-color: rgb(148, 148, 148);</string>
          <item row="1" column="1">
           <widget class="QPushButton" name="btnViewROITable">
            <property name="styleSheet">
-            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);}
+            <string notr="true">QPushButton{background-color: rgb(0, 255, 0);
+border-radius:7px;
+height:35px;
+}
 :pressed
 { 
  padding-left:3px;
@@ -511,7 +522,7 @@ background-color: rgb(148, 148, 148);</string>
 :hover
 {
  color:rgb(75, 75, 75);}
- 
+
 
 </string>
            </property>

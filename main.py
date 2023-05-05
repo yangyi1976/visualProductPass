@@ -29,18 +29,7 @@ class MainWindow(QWidget):
         self.ui.lbCamera.installEventFilter(self) #安装事件监听器
         self.ui.btnSetup.setText("")
         #QIcon来自资源文件pic_rc.py,路径格式:icon/icon/*.ico,也可以之前来自ico文件icon/*.ico
-        self.ui.btnSetup.setIcon(QIcon(":icon/icon/setup.ico"))
-        self.ui.btnSetup.setIconSize(QSize(64,64))
-        self.ui.btnCounterRot.setIcon(QIcon(":icon/icon/rotate-left.ico"))
-        self.ui.btnCounterRot.setIconSize(QSize(32,32))
-        self.ui.btnRot.setIcon(QIcon(":icon/icon/rotate-right.ico"))
-        self.ui.btnRot.setIconSize(QSize(32, 32))
-        self.ui.btnViewROITable.setIcon(QIcon(":icon/icon/winprops.ico"))
-        self.ui.btnViewROITable.setIconSize(QSize(32, 32))
-        self.ui.btnUploadRIO.setIcon(QIcon(":icon/icon/remote.ico"))
-        self.ui.btnUploadRIO.setIconSize(QSize(32, 32))
-        self.ui.btnUpLocal.setIcon(QIcon(":icon/icon/kwrite.ico"))
-        self.ui.btnUpLocal.setIconSize(QSize(32, 32))
+        self.setWidgetsIcon()
         # self.ui.lbCamera.setScaledContents(True)
 
         self.lButtonDownFlag = False
@@ -52,32 +41,49 @@ class MainWindow(QWidget):
         self.rectW = 0
         self.listROI_fileName=[]
         self.getInitParam() #获取配置参数
-        self.cap = cv2.VideoCapture(self.cameraIndex, cv2.CAP_DSHOW)  # cv2.CAP_DSHOW参数为操作系统提供的后台视频流库处理接口
-        # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-
-        self.th = CameraThread(self.cap)
-        self.th.flashPixmap.connect(self.setImage)
-        self.th.start()
         #删除文件存储时间大于指定天数的文件夹
         self.delFilesTh=DelFileByDaysThread(self.storeFilesDays)
         self.delFilesTh.start()
         self.showMaximized()
+        QApplication.processEvents()
         self.setWindowTitle("废票信息可视化传递")
         self.initListWidget()  #初始化水平图片显示组件
+        self.cap = cv2.VideoCapture(self.cameraIndex + cv2.CAP_DSHOW)  # cv2.CAP_DSHOW参数为操作系统提供的后台视频流库处理接口
+        # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(self.cameraWidth))
+        # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(self.cameraHeight))
+
+        self.th = CameraThread(self.cap)
+        self.th.setCameraWH(int(self.cameraWidth),int(self.cameraHeight))  #根据配置文件设置摄像头分辨率
+        self.th.setVideoSize(self.ui.lbCamera.width()-60, self.ui.lbCamera.height()-20) #按照控件尺寸缩放视频
+        self.th.flashPixmap.connect(self.setImage)
+        self.th.start()
+
         self.label_mousePos = QLabel( self.ui.lbCamera,alignment=Qt.AlignCenter)
         self.label_mousePos.setStyleSheet('background-color:green; border: 1px solid black')
         self.cartNoDetector=CartROIdetector()
+        print("初始化时：",self.ui.lbCamera.width(),self.ui.lbCamera.height())
 
+    def setWidgetsIcon(self):
+        self.ui.btnSetup.setIcon(QIcon(":icon/icon/setup.ico"))
+        self.ui.btnSetup.setIconSize(QSize(64, 64))
+        self.ui.btnCounterRot.setIcon(QIcon(":icon/icon/rotate-left.ico"))
+        self.ui.btnCounterRot.setIconSize(QSize(32, 32))
+        self.ui.btnRot.setIcon(QIcon(":icon/icon/rotate-right.ico"))
+        self.ui.btnRot.setIconSize(QSize(32, 32))
+        self.ui.btnViewROITable.setIcon(QIcon(":icon/icon/winprops.ico"))
+        self.ui.btnViewROITable.setIconSize(QSize(32, 32))
+        self.ui.btnUploadRIO.setIcon(QIcon(":icon/icon/remote.ico"))
+        self.ui.btnUploadRIO.setIconSize(QSize(32, 32))
+        self.ui.btnUpLocal.setIcon(QIcon(":icon/icon/kwrite.ico"))
+        self.ui.btnUpLocal.setIconSize(QSize(32, 32))
 
     def initListWidget(self):
         self.ui.lsImgROIWidget.setFlow(QListView.Flow(1))  # 0: left to right,1: top to bottom
         self.ui.lsImgROIWidget.setViewMode(QListView.IconMode)
         self.ui.lsImgROIWidget.setContextMenuPolicy(Qt.CustomContextMenu) #允许右键自定义菜单
         self.ui.lsImgROIWidget.customContextMenuRequested[QPoint].connect(self.rightMenuListWidget)
-        h=self.ui.lsImgROIWidget.height()
-        self.ui.lsImgROIWidget.setIconSize(QSize(200, h-50))
+        h=self.ui.lsImgROIWidget.height()-40
+        self.ui.lsImgROIWidget.setIconSize(QSize(h/0.75, h))  #4；3显示ROI图
         self.ui.lsImgROIWidget.itemDoubleClicked.connect(self.showImage)
         self.lastItem=QListWidgetItem()
 
@@ -87,7 +93,11 @@ class MainWindow(QWidget):
         self.cameraIndex=int(shelf['cameraIndex'])
         self.storeFilesDays=int(shelf['storeFilesDays'])
         self.uploadUrl=shelf['upload_servIp']+":"+shelf['upload_servPort']+shelf['upload_servAPI']
+        self.cameraHeight=shelf['cameraHeight']
+        self.cameraWidth=shelf['cameraWidth']
         shelf.close()
+        #获取屏幕分辨率尺寸
+        self.screenW,self.screenH=self.getScreenRect()
 
 
     def rightMenuListWidget(self):
@@ -143,7 +153,6 @@ class MainWindow(QWidget):
 
     def setImage(self, image):   #显示摄像头图像，以及选择矩形
         # print("图片高度：",image.height())
-        # print("图片宽度：
 
         self.frame=image
         painter = QtGui.QPainter(self.frame)
@@ -327,6 +336,9 @@ class MainWindow(QWidget):
         self.listROI_fileName=[]
         self.ui.lsImgROIWidget.clear()
         print("上传。。。。")
+        print("最大化：%d，%d," %(self.ui.lbCamera.width(), self.ui.lbCamera.height()))
+        print(self.ui.lbCamera.size())
+
 
     @pyqtSlot()
     def on_btnUpLocal_clicked(self):
@@ -362,6 +374,14 @@ class MainWindow(QWidget):
         self.paramSetupWin.rebootSignal.connect(self.rebootApp)
         self.paramSetupWin.show()
 
+    def getScreenRect(self):
+        desktop = QApplication.desktop()
+        # 获取显示器分辨率大小
+        screenRect = desktop.screenGeometry()
+        height = screenRect.height()
+        width =  screenRect.width()
+        return width,height
+
     def rebootApp(self):
         print("reboot.......")
         # python = sys.executable
@@ -379,7 +399,6 @@ class MainWindow(QWidget):
         :return:
         '''
         currentImgIdx = self.ui.lsImgROIWidget.currentIndex().row()
-        print("rotate img list item:", currentImgIdx)
         if currentImgIdx == -1:
             return
         fileName = self.listROI_fileName[currentImgIdx] + '.jpg'
@@ -398,7 +417,6 @@ class MainWindow(QWidget):
         :return:
         '''
         currentImgIdx = self.ui.lsImgROIWidget.currentIndex().row()
-        print("rotate img list item:", currentImgIdx)
         if currentImgIdx==-1 :
             return
         fileName=self.listROI_fileName[currentImgIdx]+'.jpg'
