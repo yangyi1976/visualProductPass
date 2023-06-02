@@ -17,12 +17,15 @@ class CartROIdetector(object ):
         # src_image=cv.imread(r'F:\PycharmProjects\pp_ocr_py34\img\274.jpg')
         deliate_img = self.preProcessImg(src_image) #图片预处理，二值化+膨胀
         x,y,w,h=self.Extract(deliate_img)
-        #提却ROI区域图像
+        img1=cv.rectangle(src_image,(x,y),(x+w,y+h),(0,0,255))
+        cv.imshow('Original GRAY image', img1)
+        #提取 ROI区域图像
         cut_img = src_image[y - 3:y + h + 10, x - 3:x + w + 10]
         # cut_img = np.rot90(cut_img, 1)
         # cv.imshow('Enlarged original image', cut_img)
         # cv.waitKey(0)
         return cut_img
+
 
     def getCartNumRect(self, src_image):
         '''
@@ -69,16 +72,18 @@ class CartROIdetector(object ):
         #转换为灰度图像
         img_src = cv.cvtColor(img_src, cv.COLOR_BGR2GRAY)
         img_src = cv.equalizeHist(img_src)
-        # cv.imshow('Original GRAY image', img_src)
+        cv.imshow('Original GRAY image', img_src)
         # cv.waitKey(0)
         # 将图像转化成标准大小
-        # img_src = cv.resize(img_src, (1200, 1800))
-        cv.imshow('original image', img_src)
+        h,w=img_src.shape[:2]
+        # if w>=1920:
+        #     img_src = cv.resize(img_src, (1280, 720))
+        cv.imshow('resize image', img_src)
         cv.waitKey(0)
         # 图像二值化
-        # ret, binary_img = cv.threshold(img_src, 150, 255, cv.THRESH_BINARY_INV  )
-        ret, binary_img = cv.threshold(img_src, 0, 255, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
-        # cv.imshow('Binary image', binary_img)
+        ret, binary_img = cv.threshold(img_src, 140 , 255, cv.THRESH_BINARY_INV  )
+        # ret, binary_img = cv.threshold(img_src, 0, 255, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
+        cv.imshow('Binary image', binary_img)
         # cv.waitKey(0)
 
         # 膨胀卷积核 RECTANGULAR
