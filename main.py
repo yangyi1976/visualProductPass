@@ -4,6 +4,8 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot,  QProcess
 from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction, \
     QFileDialog
+
+from CameraPropSetupDlg import CameraPropSetupDlg
 from ui_mainWindow import Ui_Form
 from cameraThread import CameraThread
 from delFileByDaysThread import DelFileByDaysThread
@@ -15,8 +17,7 @@ from cartROIdetct import  CartROIdetector
 import  cv2
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
-
+from CameraConf import CameraConf
 
 class MainWindow(QWidget):
     def __init__(self,parent=None):
@@ -51,13 +52,17 @@ class MainWindow(QWidget):
         self.cap = cv2.VideoCapture(self.cameraIndex + cv2.CAP_DSHOW)  # cv2.CAP_DSHOW参数为操作系统提供的后台视频流库处理接口
         # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(self.cameraWidth))
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(self.cameraHeight))
-
+        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS,1)  #摄像头自动对焦
+        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+        # cameraCfg=CameraConf()
+        # cameraCfg.setCamera(self.cap)
         self.th = CameraThread(self.cap)
+
         self.th.setCameraWH(int(self.cameraWidth),int(self.cameraHeight))  #根据配置文件设置摄像头分辨率
+
         self.th.setVideoSize(self.ui.lbCamera.width()-60, self.ui.lbCamera.height()-20) #按照控件尺寸缩放视频
         self.th.flashPixmap.connect(self.setImage)
         self.th.start()
-
         self.label_mousePos = QLabel( self.ui.lbCamera,alignment=Qt.AlignCenter)
         self.label_mousePos.setStyleSheet('background-color:green; border: 1px solid black')
         self.cartNoDetector=CartROIdetector()
@@ -98,7 +103,6 @@ class MainWindow(QWidget):
         shelf.close()
         #获取屏幕分辨率尺寸
         self.screenW,self.screenH=self.getScreenRect()
-
 
     def rightMenuListWidget(self):
         rightMenu = QMenu(self.ui.lsImgROIWidget)
@@ -374,6 +378,15 @@ class MainWindow(QWidget):
         self.paramSetupWin.rebootSignal.connect(self.rebootApp)
         self.paramSetupWin.show()
 
+
+    @pyqtSlot()
+    def on_btnCameraProp_clicked(self):
+        # self.cap.set(cv2.CAP_PROP_SETTINGS, 0) #弹出opencv自带的设置摄像头参数的窗口
+        cameraPropDlg = CameraPropSetupDlg(self.cap)
+        cameraPropDlg.exec_()
+
+
+
     def getScreenRect(self):
         desktop = QApplication.desktop()
         # 获取显示器分辨率大小
@@ -427,6 +440,9 @@ class MainWindow(QWidget):
         roiPix.save(fileName)
         self.freshImgListWidget(self.listROI_fileName)  # 刷新listwidget，重新加载图像文件列表
         self.ui.lsImgROIWidget.setCurrentRow(currentImgIdx)
+
+
+
 
     def closeEvent(self,event):
         print("关闭主程序窗口")

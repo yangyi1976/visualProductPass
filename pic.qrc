@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file>icon/camera.ico</file>
     <file>icon/del_can.ico</file>
     <file>icon/del_x.ico</file>
     <file>icon/greenDBArrow.ico</file>

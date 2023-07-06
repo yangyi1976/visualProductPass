@@ -1,5 +1,6 @@
 import cv2 as cv
 import shelve
+import numpy as np
 
 class CartROIdetector(object ):
 
@@ -17,11 +18,16 @@ class CartROIdetector(object ):
         # src_image=cv.imread(r'F:\PycharmProjects\pp_ocr_py34\img\274.jpg')
         deliate_img = self.preProcessImg(src_image) #图片预处理，二值化+膨胀
         x,y,w,h=self.Extract(deliate_img)
+        x = x - 50
+        y = y - 50
+        w = w + 100
+        h = h + 100
         img1=cv.rectangle(src_image,(x,y),(x+w,y+h),(0,0,255))
         cv.imshow('Original GRAY image', img1)
         #提取 ROI区域图像
-        cut_img = src_image[y - 3:y + h + 10, x - 3:x + w + 10]
-        # cut_img = np.rot90(cut_img, 1)
+        cut_img = src_image[y :y + h , x :x + w ]
+        if w<h:
+            cut_img = np.rot90(cut_img, 1)
         # cv.imshow('Enlarged original image', cut_img)
         # cv.waitKey(0)
         return cut_img
@@ -35,6 +41,7 @@ class CartROIdetector(object ):
         '''
         deliate_img = self.preProcessImg(src_image)
         x, y, w, h = self.Extract(deliate_img)
+
         return x, y, w, h
 
     def Extract(self,op_image):
@@ -51,9 +58,10 @@ class CartROIdetector(object ):
             #高/宽之比
             occupy = float(h) / w
             # 7<=比值<=11，可以配置成参数
-
+            print(occupy)
             if occupy >= int(self.occpuyMin) and occupy <= int(self.occpuyMax):
                 s = cv.contourArea(c) #计算区域的面积
+
                 if max_w < w:      #宽大于最大值，更换面积s
                     max_x = x
                     max_y = y
@@ -70,19 +78,23 @@ class CartROIdetector(object ):
         '''
 
         #转换为灰度图像
-        img_src = cv.cvtColor(img_src, cv.COLOR_BGR2GRAY)
-        img_src = cv.equalizeHist(img_src)
-        cv.imshow('Original GRAY image', img_src)
-        # cv.waitKey(0)
+        img_src1 = cv.cvtColor(img_src, cv.COLOR_BGR2GRAY)
+        img_src1 = cv.equalizeHist(img_src1) #直方图均衡
+
+        img_src=cv.blur(img_src1,(3,3)) #均值滤波
+        # img_src=cv.GaussianBlur(img_src1,(3,3),0,0)
+        # img_src = cv.bilateralFilter(img_src1, 5, 150, 150)
+        cv.imshow('Original Filter image', img_src)
+        cv.waitKey(0)
         # 将图像转化成标准大小
         h,w=img_src.shape[:2]
         # if w>=1920:
         #     img_src = cv.resize(img_src, (1280, 720))
-        cv.imshow('resize image', img_src)
-        cv.waitKey(0)
+        # cv.imshow('resize image', img_src)
+        # cv.waitKey(0)
         # 图像二值化
-        ret, binary_img = cv.threshold(img_src, 140 , 255, cv.THRESH_BINARY_INV  )
-        # ret, binary_img = cv.threshold(img_src, 0, 255, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
+        # ret, binary_img = cv.threshold(img_src, 150 , 255, cv.THRESH_BINARY_INV  )
+        ret, binary_img = cv.threshold(img_src, 0, 255, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
         cv.imshow('Binary image', binary_img)
         # cv.waitKey(0)
 

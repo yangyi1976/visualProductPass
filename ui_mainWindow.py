@@ -2,12 +2,11 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.2
+# Created by: PyQt5 UI code generator 5.4.2
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -39,6 +38,14 @@ class Ui_Form(object):
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_2.addWidget(self.label_6)
+        self.btnCameraProp = QtWidgets.QPushButton(Form)
+        self.btnCameraProp.setMinimumSize(QtCore.QSize(16, 16))
+        self.btnCameraProp.setMaximumSize(QtCore.QSize(64, 64))
+        self.btnCameraProp.setStyleSheet("image: url(:/icon/icon/camera.ico);\n"
+"border-radius:7px;")
+        self.btnCameraProp.setText("")
+        self.btnCameraProp.setObjectName("btnCameraProp")
+        self.horizontalLayout_2.addWidget(self.btnCameraProp)
         self.btnSetup = QtWidgets.QPushButton(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -56,6 +63,7 @@ class Ui_Form(object):
         self.horizontalLayout_2.setStretch(0, 1)
         self.horizontalLayout_2.setStretch(1, 12)
         self.horizontalLayout_2.setStretch(2, 1)
+        self.horizontalLayout_2.setStretch(3, 1)
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
@@ -350,6 +358,5 @@ class Ui_Form(object):
         self.lbNumberpPic.setText(_translate("Form", "车号"))
         self.btnUpLocal.setText(_translate("Form", "上传本地图片"))
         self.btnViewROITable.setText(_translate("Form", "ROI图查看"))
-
 
 import pic_rc

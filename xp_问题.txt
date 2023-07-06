@@ -12,7 +12,7 @@ binary, contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_
 videocapture(0,cv2.cap_dshow) 改为（0+cv2.cap_dshow)
 
 安装包：
-1，安装opencv -python ，3.2.0.8，另外，pip版本要用python34环境，不是venv环境里的，可以把opencv-python 3.2.0.8 ，拷贝到venv环境里
+1，安装opencv-python ，3.2.0.8，另外，pip版本要用python34环境，不是venv环境里的，可以把opencv-python 3.2.0.8 ，拷贝到venv环境里
 2.要在xp环境下重新打包。
 3.需要拷贝配置文件
 
