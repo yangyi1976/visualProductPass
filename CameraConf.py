@@ -16,7 +16,7 @@ class CameraConf:
     def setCamera(self, cap):
         cfg = self.getCameraConf()
         cap.set(cv2.CAP_PROP_FPS, int(cfg.get('camera', 'fps')))
-        cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+        # cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
         cap.set(cv2.CAP_PROP_ZOOM, int(cfg.get('camera', 'zoom')))
 
         cap.set(cv2.CAP_PROP_BRIGHTNESS, int(cfg.get('camera', 'bright')))

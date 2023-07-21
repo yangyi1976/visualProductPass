@@ -14,7 +14,7 @@ from zoomImgWiin import ZoomImgwin
 class ViewROITableWin(QWidget):
 
     imageFileListChanged=pyqtSignal(list)
-    def __init__(self, imgFileList,carttNo,parent=None):
+    def __init__(self, imgFileList,carttNo,listformatPosInfo,parent=None):
         super().__init__(parent)
         self.ui = Ui_ROITableWindow()
         self.ui.setupUi(self)
@@ -22,6 +22,7 @@ class ViewROITableWin(QWidget):
         self.setWindowFlags(Qt.WindowCloseButtonHint |Qt.WindowStaysOnTopHint)
         # self.resize(1160,900)
         self.imgFileList=imgFileList
+        self.formatPosList=listformatPosInfo
         self.ui.lbCartNum.setText(carttNo)
         rows= (len(imgFileList)//4 )+1 if len(imgFileList)%4 >0 else len(imgFileList)//4   #//向下取整
         self.displayROITable(rows, 4)   #一行四列
@@ -119,6 +120,7 @@ class ViewROITableWin(QWidget):
             # self.ui.tableWidget.removeCellWidget(i,j)
             os.remove(self.imgFileList[k]+".jpg")
             del self.imgFileList[k]
+            del self.formatPosList[k]
             #重新显示表格
             self.ui.tableWidget.clear()
             rows = (len(self.imgFileList) // 4) + 1 if len(self.imgFileList) % 4 > 0 else len(self.imgFileList) // 4

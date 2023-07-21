@@ -20,7 +20,9 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 from CameraConf import CameraConf
 
 class MainWindow(QWidget):
+
     def __init__(self,parent=None):
+
         if hasattr(sys, 'frozen'):
             os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
         super().__init__(parent)
@@ -57,9 +59,7 @@ class MainWindow(QWidget):
         # cameraCfg=CameraConf()
         # cameraCfg.setCamera(self.cap)
         self.th = CameraThread(self.cap)
-
         self.th.setCameraWH(int(self.cameraWidth),int(self.cameraHeight))  #根据配置文件设置摄像头分辨率
-
         self.th.setVideoSize(self.ui.lbCamera.width()-60, self.ui.lbCamera.height()-20) #按照控件尺寸缩放视频
         self.th.flashPixmap.connect(self.setImage)
         self.th.start()
@@ -94,10 +94,10 @@ class MainWindow(QWidget):
 
     def getInitParam(self):
         shelf = shelve.open('cfg')
-        self.servIP = shelf['ORCServer_IP'] + ":8089"
+        self.OCRServIP = shelf['ORCServer_IP'] + ":8089"
         self.cameraIndex=int(shelf['cameraIndex'])
         self.storeFilesDays=int(shelf['storeFilesDays'])
-        self.uploadUrl=shelf['upload_servIp']+":"+shelf['upload_servPort']+shelf['upload_servAPI']
+        self.uploadUrl="http://"+shelf['upload_servIp']+":"+shelf['upload_servPort']+shelf['upload_servAPI']
         self.cameraHeight=shelf['cameraHeight']
         self.cameraWidth=shelf['cameraWidth']
         shelf.close()
@@ -117,21 +117,21 @@ class MainWindow(QWidget):
         print("del img list item:",currentImgIdx)
         os.remove(self.listROI_fileName[currentImgIdx] + ".jpg")
         del self.listROI_fileName[currentImgIdx]
+        del listformatPosInfo[currentImgIdx]   #清空开位信息列表
         # currentItem = self.ui.lsImgROIWidget.currentItem()
         # self.ui.lsImgROIWidget.removeItemWidget(currentItem)
         self.ui.lsImgROIWidget.takeItem(currentImgIdx)  #删除listWidget里选择的item
         # self.freshImgListWidget(self.listROI_fileName)  #刷新listwidget
 
-
     def addListWidgetImageItem(self,pixImage,img_name):
         item = QListWidgetItem(QIcon(pixImage), img_name)
         self.ui.lsImgROIWidget.addItem(item)
 
-    def splitCartNum(self,cartNumStr):
+    def splitCartNum(self,cartNumStr):  #将条码ID拆分成产品类型与车号
         producttype=cartNumStr[0]
-        cartNum=cartNumStr[1:4]
+        cartNum=cartNumStr[1:5]  #1-4位
         productId=cartNumStr[6:9]
-        return cartNum,productId
+        return producttype,cartNum
 
     def showImage(self):
         """
@@ -208,6 +208,7 @@ class MainWindow(QWidget):
                 self.mousePosShow(evn.pos(),w,h)
 
         elif o is self.ui.lbCamera and evn.type() == QEvent.MouseButtonRelease:  #鼠标释放
+
                 self.lButtonDownFlag=False
                 if self.startPX == self.endPX :
                     self.label_mousePos.close()
@@ -223,6 +224,9 @@ class MainWindow(QWidget):
                 if not os.path.isdir(dirName):    #当前目录是否存在
                     os.makedirs(dirName)
                 imgFileName=str(self.ui.editProductID.text()+"#"+self.ui.editK.text())
+                # global  params
+                formatPosInfo['format_pos'] = self.ui.editK.text()
+                formatPosInfo['remark'] =self.ui.txtDescribe.toPlainText()
                 fileFullPath = dirName+"\\" + imgFileName
                 imgROI = self.frame.copy(startX, startPY, ROIw, ROIh)
                 imgROI.save(fileFullPath+".jpg","JPG",100) #创建ROI文件，重名就覆盖
@@ -232,12 +236,14 @@ class MainWindow(QWidget):
                     item=self.ui.lsImgROIWidget.item(listIndex)
                     item.setIcon(QIcon(QPixmap.fromImage(imgROI)))
                     self.ui.lsImgROIWidget.repaint() #刷新列表
-
+                    #更换开信息列表里的开信息
+                    listformatPosInfo[listIndex]=formatPosInfo
                 else:
-                    self.listROI_fileName.append(fileFullPath)  #不带文件扩展名的目录+文件名列表
+                    self.listROI_fileName.append(fileFullPath)  #添加改RIO截图文件名
                     # imgROI=imgROI.scaled(w,h, Qt.KeepAspectRatio)
                     # 给水平Listwidget组件添加ROI list image
                     self.addListWidgetImageItem(QPixmap.fromImage(imgROI),imgFileName)
+                    listformatPosInfo.append(formatPosInfo)
                 self.ui.editK.setText("")
         return super().eventFilter(o, evn)
 
@@ -262,7 +268,7 @@ class MainWindow(QWidget):
         打开ROI图像表格窗口
         :return:
         '''
-        self.viewRoiTable = ViewROITableWin(self.listROI_fileName,self.ui.editProductID.text())
+        self.viewRoiTable = ViewROITableWin(self.listROI_fileName,self.ui.editProductID.text(),listformatPosInfo)
         self.viewRoiTable.imageFileListChanged.connect(self.freshImgListWidget)
         self.viewRoiTable.show()
 
@@ -276,39 +282,37 @@ class MainWindow(QWidget):
         # self.postImg(r'F:\PycharmProjects\pp_ocr_py34\img\1cartNum.jpg')
         # servIP='172.16.18.127:8089'
         try:
-            self.postImg(fullName,self.servIP)
+            self.postImg(fullName,self.OCRServIP)
         except Exception as e:
             QMessageBox.information(self,"错误",str(e)+"\n --无法进行车号的OCR识别，请重新调整再进识别！")
         #在控件里显示车号图片
         pixImage = QPixmap(fullName)
         pixImage=pixImage.scaled(200, 190, Qt.KeepAspectRatio)
         self.ui.lbNumberpPic.setPixmap(pixImage)
-        # #弹出窗口显示车号图片
-        # cv2.namedWindow('cartNumImg window', cv2.WINDOW_NORMAL)
-        # cv2.imshow("cartNumImg window", img)
-        #让窗口居于屏幕中间显示
-        # desktop = QApplication.desktop()
-        # x_center=int(desktop.width()/2)
-        # y_center=int(desktop.height()/2)
-        # cv2.resizeWindow("cartNumImg window", img.shape[1], img.shape[0])
-        # cv2.moveWindow("cartNumImg window", x_center-int(img.shape[1]/2), y_center-int(img.shape[0]/2))
-        # k=cv2.waitKey(2000)
-        # if k==27:
-        #     return
-        # cv2.destroyAllWindows()
+       #通过MES接口根据车号获取工序，机台以及设备
 
-    def postImg(self,fileName,servIP):
+    def getCartInfoByCartNo(self,cartNo,getCartInfoUrl):
+        headers = {'Content-type': 'application/json'}
+        try:
+            res = requests.post(getCartInfoUrl, headers=headers, json=cartNo)
+        except requests.exceptions.ConnectionError as e:
+            QMessageBox.information(self, "错误", "MES系统接口异常，无法获取车号信息，" + str(e))
+            raise e
+        resInfo = res.json()
+        return res.status_code
+
+    def postImg(self,fileName,OCRServIP):
         '''
         将保存的车号ROI图像文件发送到OCR server，进行识别
         :param fileName:
-        :param servIP: OCR server IP
+        :param OCRservIP: OCR server IP
         :return: json格式的识别结果，['data']['raw_out'][0][1]为车号
         '''
         headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
             # 'Content-type':'multipart/form-data',
             'X-Requested-With': 'XMLHttpRequest'}
-        post_url='http://'+servIP+'/api/tr-run/'
+        post_url='http://'+OCRServIP+'/api/tr-run/'
 
         imgData = {'file': ('cartNum.jpg',open(fileName, 'rb'),'image/jpeg'),'compress':'300'}
         imgData_encoder = MultipartEncoder(imgData)
@@ -336,12 +340,93 @@ class MainWindow(QWidget):
 
     @pyqtSlot()
     def on_btnUploadRIO_clicked(self):
-        #上传完清除listWidget列表
+        '''
+        调用上传接口，传递废票信息
+        :return:
+        '''
+        #---fileName格式 img\车号\车号#开位
+        #上传完清除listWidget列表及listParams列表
+        imgInfo = {}          #要上传的ROI图像信息
+        global listformatPosInfo       #字典变量可以不加全局
+        params['cart_number']=self.ui.editProductID.text()
+        params['pu_id']= '18' #self.ui.lbWorkSeq.text()
+        params['machine_id']='7704'
+        params['captain']=self.ui.lbMachineLeader.text()
+        #params['remark']=self.ui.txtDescribe.toPlainText()
+        for i in range(len(self.listROI_fileName)):
+            imgfile=self.listROI_fileName[i]   #无法确定是否批量的，先测试传第一个图像
+            fileName = (imgfile)[imgfile.rfind('\\') + 1:]  #解析出img name
+            imgInfo['filename']=fileName
+            imgInfo['fullpath']=imgfile+'.jpg'
+            imgInfo['info']=""
+            print("上传服务器接口：",self.uploadUrl)
+            params['format_pos']=listformatPosInfo[i]['format_pos']
+            params['remark']=listformatPosInfo[i]['remark']
+            imgSaveUrl= self.uploadImgToQualitySys(imgInfo,self.uploadUrl)
+            if  imgSaveUrl is not None:
+                print(imgSaveUrl)
+                params['url']=imgSaveUrl   #图像上传保存地址
+            else:
+                QMessageBox.information(self, "错误", "质量信息系统接口异常，无法上传图像数据，" +self.uploadUrl)
+                return
+            self.uploadParamUrl="http://10.8.1.25:100/1810/87c1377d8a.json"
+            if self.uplaodImgParamToQualitySys(params,self.uploadParamUrl)=='200':
+                QMessageBox.information(self, "信息", "废票数据传递到质量信息系统成功，")
+            else:
+                QMessageBox.information(self, "错误", "废票数据未传递到质量信息系统，")
+                return
         self.listROI_fileName=[]
+        del listformatPosInfo
+        self.ui.txtDescribe.clear()
         self.ui.lsImgROIWidget.clear()
-        print("上传。。。。")
-        print("最大化：%d，%d," %(self.ui.lbCamera.width(), self.ui.lbCamera.height()))
-        print(self.ui.lbCamera.size())
+        # self.ui.lbMachineLeader.clear()
+        # self.ui.lbWorkSeq.clear()
+
+    def uploadImgToQualitySys(self,imgInfo,uploadUrl):
+        '''
+        将图片文件上传质量信息系统接口
+        :param imgfile:dict类型 {“filename”：“fullpath”：“info”}
+        :param uploadUrl: 质量信息系统API接口
+        :return: 成功，True
+        '''
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
+            # 'Content-type':'multipart/form-data',
+            'X-Requested-With': 'XMLHttpRequest'}
+
+        imgData = {'file': (imgInfo['filename'], open(imgInfo['fullpath'], 'rb'), 'image/jpeg'), 'info': imgInfo['info']}
+        imgData_encoder = MultipartEncoder(imgData)
+        headers['Content-type'] = imgData_encoder.content_type
+        # data = {'compress': '200'}  可以不用request_toolbelt库以及Content-type,而使用下面一行代码
+        # r = requests.post(post_url, headers=headers, files=imgData_encoder,data=data)
+        try:
+            res = requests.post(uploadUrl, headers=headers, data=imgData_encoder)
+            res.raise_for_status() #判断网络连接状态，错误就抛出异常
+        except requests.exceptions.ConnectionError as e:
+            QMessageBox.information(self,"错误","质量信息系统接口异常，无法上传图像，"+str(e))
+            raise e
+        resInfo = res.json()
+         
+        if resInfo['msg']=="上传成功" and resInfo['url'] !='':
+            return resInfo['url']
+        else :
+            return None
+
+    def uplaodImgParamToQualitySys(self,params,uploadParamUrl):
+        '''
+        上传图像参数数据（ 到质量平台
+        :param params: 图像参数（车号、开位、工序、设备、机长、描述、图片地址）
+        :param uploadParamUrl:质量参数写入接口
+        :return:res.status_code 200
+        '''
+        headers = {'Content-type': 'application/json'}
+        try:
+            res=requests.post(uploadParamUrl,headers=headers,json=params)
+        except requests.exceptions.ConnectionError as e:
+            QMessageBox.information(self, "错误", "质量信息系统接口异常，无法上传废票信息数据，" + str(e))
+            raise e
+        # resInfo = res.json()
+        return res.status_code
 
 
     @pyqtSlot()
@@ -378,14 +463,15 @@ class MainWindow(QWidget):
         self.paramSetupWin.rebootSignal.connect(self.rebootApp)
         self.paramSetupWin.show()
 
-
     @pyqtSlot()
     def on_btnCameraProp_clicked(self):
+        '''
+        弹出摄像头参数设置窗口
+        :return:
+        '''
         # self.cap.set(cv2.CAP_PROP_SETTINGS, 0) #弹出opencv自带的设置摄像头参数的窗口
         cameraPropDlg = CameraPropSetupDlg(self.cap)
         cameraPropDlg.exec_()
-
-
 
     def getScreenRect(self):
         desktop = QApplication.desktop()
@@ -403,7 +489,6 @@ class MainWindow(QWidget):
         QApplication.quit()
         status = QProcess.startDetached(sys.executable, sys.argv)
         print(status)
-
 
     @pyqtSlot()
     def on_btnCounterRot_clicked(self):
@@ -441,9 +526,6 @@ class MainWindow(QWidget):
         self.freshImgListWidget(self.listROI_fileName)  # 刷新listwidget，重新加载图像文件列表
         self.ui.lsImgROIWidget.setCurrentRow(currentImgIdx)
 
-
-
-
     def closeEvent(self,event):
         print("关闭主程序窗口")
         self.th.cap.release()
@@ -460,6 +542,9 @@ if __name__=="__main__":
     #
     # sys.exit(app.exec_())
     current_exit_code = 2023
+    params={}
+    formatPosInfo = {}
+    listformatPosInfo=[]
     while current_exit_code == 2023:
         app = QApplication(sys.argv)
         main_window = MainWindow()

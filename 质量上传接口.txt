@@ -1,0 +1,66 @@
+﻿设备列表
+http://10.8.1.25:100/1809/313fb267c6.json
+
+
+工序列表
+http://10.8.1.25:100/1808/fa10b17afa.json
+
+
+写入数据：
+
+http://10.8.1.25:100/1810/87c1377d8a.json
+
+/**
+ *   @database: { MES系统_生产环境 }
+ *   @desc:     { 生产质量信息传递-数据写入 }  
+ */
+export const addCbpcCartCare: (params: {
+  cart_number: string;
+  format_pos: string;
+  pu_id: string;
+  machine_id: string;
+  captain: string;
+  remark: string;
+  url: string;
+}) => Promise < number > = params => axios < TDbWrite > ({
+  url: DEV ? _commonData : '/1810/87c1377d8a.json',
+  params,
+}).then(
+({
+  data: [{id}]
+}) => id);
+
+
+————————————————————
+
+
+业务表：tbl_cbpc_cart_care
+
+cart_number 	车号
+format_pos	    开位
+pu_id			工序
+machine_id		设备
+captain			机长
+remark			描述信息
+url				url列表 	
+
+
+_______________________
+
+select * from v_cbpc_cart_care
+
+id	车号	工序	设备	开位	机长	关注信息	链接	记录时间
+2	2325A123	凹二印	W92B-6号	23	张三	这里是备注内容	/assets/2023/06/image/1687834789_33942_dSiOnNbSHB7YsnAaVJcgxPYrR5uNxjEK.png	2023-07-17 09:35:01
+
+_______________________
+
+{'source': '数据来源：MES系统_生产环境', 
+'serverTime': '2023-07-20 10:46:17',
+ 'time': '21.009ms', 
+'setCache': True, 
+'header': ['id', 'affected_rows'],
+ 'dates': [], 
+'ip': '10.8.60.27', 
+'rows': 1,
+ 'data': [{'affected_rows': 1, 'id': 10}],
+ 'title': '生产质量信息传递-数据写入'}

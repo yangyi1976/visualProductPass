@@ -45,6 +45,10 @@ class CameraPropSetupDlg(QDialog):
         self.ui.SliderBrightness.setValue(0)  # 让亮度滑块居中
         self.ui.SliderContrast.setValue(32)
 
+        # self.cap.set(cv2.CAP_PROP_SETTINGS)
+        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS,1)
+        # self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0)
+
     def  changeZoom(self,value):
         print("zoom changing to:",value)
         self.cap.set(cv2.CAP_PROP_ZOOM, value)

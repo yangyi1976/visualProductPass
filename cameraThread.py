@@ -30,14 +30,12 @@ class CameraThread(QThread):#采用线程来播放视频
         '''
         self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')) #设置成视频流mjpg格式，默认为yuy2
         self.cap.set(cv2.CAP_PROP_FPS, 30)
-        self.cap.set(cv2.CAP_PROP_SETTINGS,1)
-        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS, -1)
-        # self.cap.set(cv2.CAP_PROP_FOCUS, 0)
 
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(w))
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(h))
+
         # self.cap.set(cv2.CAP_PROP_ZOOM, 60)
-        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
 
 
 
@@ -68,7 +66,6 @@ class CameraThread(QThread):#采用线程来播放视频
 
         print("开始捕捉")
         while (self.cap.isOpened()==True):
-
             ret, self.frame = self.cap.read()
             if ret:
                 # x, y, w, h = self.cartNoDetector.getCartNumRect(frame)  获取车号文字区域坐标
