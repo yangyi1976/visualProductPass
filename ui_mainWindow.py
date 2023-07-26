@@ -82,21 +82,24 @@ class Ui_Form(object):
         self.groupBox.setObjectName("groupBox")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.groupBox)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.label_3 = QtWidgets.QLabel(self.groupBox)
-        self.label_3.setStyleSheet("font: 75 14pt \"微软雅黑\";")
-        self.label_3.setObjectName("label_3")
-        self.gridLayout_4.addWidget(self.label_3, 2, 0, 1, 1)
         self.lbMachineLeader = QtWidgets.QLabel(self.groupBox)
+        self.lbMachineLeader.setEnabled(True)
         self.lbMachineLeader.setStyleSheet("background-color: rgb(48, 48, 85);\n"
 "border-radius:7px;\n"
 "border:1px solid green;\n"
 "color: rgb(0, 255, 255);\n"
-"font: 36pt \"幼圆\";")
+"font: 32pt \"幼圆\";")
         self.lbMachineLeader.setAlignment(QtCore.Qt.AlignCenter)
         self.lbMachineLeader.setObjectName("lbMachineLeader")
         self.gridLayout_4.addWidget(self.lbMachineLeader, 2, 1, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_4.addItem(spacerItem, 1, 1, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_4.addItem(spacerItem, 3, 1, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_4.addItem(spacerItem1, 0, 2, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.groupBox)
+        self.label_3.setStyleSheet("font: 75 14pt \"微软雅黑\";")
+        self.label_3.setObjectName("label_3")
+        self.gridLayout_4.addWidget(self.label_3, 2, 0, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.groupBox)
         self.label_2.setStyleSheet(" \n"
 "\n"
@@ -104,8 +107,6 @@ class Ui_Form(object):
 " ")
         self.label_2.setObjectName("label_2")
         self.gridLayout_4.addWidget(self.label_2, 0, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_4.addItem(spacerItem1, 3, 1, 1, 1)
         self.lbWorkSeq = QtWidgets.QLabel(self.groupBox)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -122,8 +123,21 @@ class Ui_Form(object):
         self.lbWorkSeq.setAlignment(QtCore.Qt.AlignCenter)
         self.lbWorkSeq.setObjectName("lbWorkSeq")
         self.gridLayout_4.addWidget(self.lbWorkSeq, 0, 1, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_4.addItem(spacerItem2, 0, 2, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_4.addItem(spacerItem2, 1, 1, 1, 1)
+        self.btnGetWorkseqInfo = QtWidgets.QPushButton(self.groupBox)
+        self.btnGetWorkseqInfo.setStyleSheet(" \n"
+"\n"
+"QPushButton{background-color: rgb(0, 177, 85);}\n"
+":pressed\n"
+"{ \n"
+" padding-left:3px;\n"
+" padding-top:3px;\n"
+"}\n"
+" \n"
+"")
+        self.btnGetWorkseqInfo.setObjectName("btnGetWorkseqInfo")
+        self.gridLayout_4.addWidget(self.btnGetWorkseqInfo, 4, 1, 1, 1)
         self.gridLayout_4.setColumnStretch(0, 2)
         self.gridLayout_4.setColumnStretch(1, 7)
         self.gridLayout_4.setColumnStretch(2, 1)
@@ -157,7 +171,8 @@ class Ui_Form(object):
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 4, 0, 1, 1)
         self.label_11 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_11.setStyleSheet("border-bottom:1px solid white;")
+        self.label_11.setStyleSheet("border-bottom:1px solid white;\n"
+"")
         self.label_11.setAlignment(QtCore.Qt.AlignCenter)
         self.label_11.setObjectName("label_11")
         self.gridLayout_2.addWidget(self.label_11, 0, 2, 1, 1)
@@ -174,12 +189,11 @@ class Ui_Form(object):
 " \n"
 "\n"
 "")
+        self.comYear.setEditable(True)
+        self.comYear.setCurrentText("")
         self.comYear.setMaxCount(5)
         self.comYear.setInsertPolicy(QtWidgets.QComboBox.InsertAtBottom)
         self.comYear.setObjectName("comYear")
-        self.comYear.addItem("")
-        self.comYear.addItem("")
-        self.comYear.addItem("")
         self.gridLayout_2.addWidget(self.comYear, 1, 0, 1, 1)
         self.label_7 = QtWidgets.QLabel(self.groupBox_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -187,13 +201,13 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(2)
         sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
         self.label_7.setSizePolicy(sizePolicy)
-        self.label_7.setStyleSheet(" \n"
-"")
+        self.label_7.setStyleSheet("")
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
         self.label_7.setObjectName("label_7")
         self.gridLayout_2.addWidget(self.label_7, 3, 0, 1, 1)
         self.label_5 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_5.setStyleSheet("border-bottom:1px solid white;")
+        self.label_5.setStyleSheet("border-bottom:1px solid white;\n"
+"")
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
         self.gridLayout_2.addWidget(self.label_5, 0, 0, 1, 1)
@@ -232,7 +246,8 @@ class Ui_Form(object):
 "color: rgb(81, 81, 81);\n"
 "font: 40pt \"黑体\";\n"
 "border-top:1px solid white;")
-        self.editK.setMaxLength(2)
+        self.editK.setInputMask("")
+        self.editK.setMaxLength(32767)
         self.editK.setAlignment(QtCore.Qt.AlignCenter)
         self.editK.setCursorMoveStyle(QtCore.Qt.VisualMoveStyle)
         self.editK.setObjectName("editK")
@@ -254,7 +269,8 @@ class Ui_Form(object):
         self.editProductID.setObjectName("editProductID")
         self.gridLayout_2.addWidget(self.editProductID, 1, 3, 1, 1)
         self.label_10 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_10.setStyleSheet("border-bottom:1px solid white;")
+        self.label_10.setStyleSheet("border-bottom:1px solid white;\n"
+"")
         self.label_10.setAlignment(QtCore.Qt.AlignCenter)
         self.label_10.setObjectName("label_10")
         self.gridLayout_2.addWidget(self.label_10, 0, 1, 1, 1)
@@ -426,7 +442,7 @@ class Ui_Form(object):
         self.verticalLayout_6.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Form)
-        self.comYear.setCurrentIndex(1)
+        self.comYear.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -434,25 +450,22 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.label_6.setText(_translate("Form", "可视化废票信息传递系统"))
         self.groupBox.setTitle(_translate("Form", "工序信息"))
-        self.label_3.setText(_translate("Form", "机长"))
-        self.lbMachineLeader.setText(_translate("Form", "TextLabel"))
+        self.lbMachineLeader.setText(_translate("Form", "*机台"))
+        self.label_3.setText(_translate("Form", "机台"))
         self.label_2.setText(_translate("Form", "工序"))
         self.lbWorkSeq.setText(_translate("Form", "凹印"))
+        self.btnGetWorkseqInfo.setText(_translate("Form", "手工获取工序信息"))
         self.groupBox_2.setTitle(_translate("Form", "产品废票信息"))
         self.label.setText(_translate("Form", "说明"))
         self.label_11.setText(_translate("Form", "标记"))
-        self.comYear.setCurrentText(_translate("Form", "23"))
-        self.comYear.setItemText(0, _translate("Form", "22"))
-        self.comYear.setItemText(1, _translate("Form", "23"))
-        self.comYear.setItemText(2, _translate("Form", "24"))
         self.label_7.setText(_translate("Form", "开位"))
         self.label_5.setText(_translate("Form", "产品年份"))
         self.txtDescribe.setPlaceholderText(_translate("Form", "请输入说明"))
-        self.editK.setPlaceholderText(_translate("Form", "?k"))
+        self.editK.setPlaceholderText(_translate("Form", "?K"))
         self.label_10.setText(_translate("Form", "品种"))
         self.label_9.setText(_translate("Form", "车号"))
         self.label_8.setText(_translate("Form", "  <--请录入开位"))
-        self.lbCamera.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt; color:#19c80c;\">未发现摄像头。。。</span></p></body></html>"))
+        self.lbCamera.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt; color:#19c80c;\">打开摄像头。。。</span></p></body></html>"))
         self.btnDetcCart.setText(_translate("Form", "识别车号"))
         self.btnUploadRIO.setText(_translate("Form", "上传废票截图"))
         self.lbNumberpPic.setText(_translate("Form", "车号"))

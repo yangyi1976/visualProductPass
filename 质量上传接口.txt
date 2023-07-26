@@ -1,4 +1,8 @@
-﻿设备列表
+﻿
+质量上传图片接口：
+http://10.8.1.25:100/upload/test.html
+======================================
+设备列表
 http://10.8.1.25:100/1809/313fb267c6.json
 
 
@@ -64,3 +68,14 @@ _______________________
 'rows': 1,
  'data': [{'affected_rows': 1, 'id': 10}],
  'title': '生产质量信息传递-数据写入'}
+==========================================
+MES获取机台工序信息接口：
+http://10.8.1.25:100/1814/faad013b85.json?carno=2375D489
+{"data":[{"CarNo":"2375D489","Location_Desc":"丝印完成品","CurrentUnit_Desc":"综合立体库1#","Class_Desc":"丝印熊伟伟机台","Next_Location_Desc":"丝印.9607T品.丝印完成品"}],
+"rows":1,"dates":[],
+"ip":"10.8.60.127",
+"header":["CarNo","Location_Desc","CurrentUnit_Desc","Class_Desc","Next_Location_Desc"],
+"title":"产品当前状态(工序，设备，机长)",
+"time":"540.828ms","serverTime":"2023-07-24 11:10:43",
+"source":"数据来源：MES系统_生产环境",
+"hash":"W\/\"4fdfb1649dd3854589daaec4b1948e22\""}

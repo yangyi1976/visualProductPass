@@ -61,6 +61,8 @@ class ParamSetupWin(QWidget):
         self.ui.lnUploadServIP.setText(shelf['upload_servIp'])
         self.ui.lnUploadServPort.setText(shelf['upload_servPort'])
         self.ui.lnUploadServAPI.setText(shelf['upload_servAPI'])
+        self.ui.lnGetCartInfoAPI.setText(shelf['getCartInfo_API'])
+        self.ui.lnUploadPosParamsAPI.setText(shelf['uploadPosParams_API'])
         shelf.close()
 
     @pyqtSlot(int)
@@ -78,7 +80,7 @@ class ParamSetupWin(QWidget):
         print("Height modified!")
     @pyqtSlot()
     def on_btnSave_clicked(self):
-        shelf = shelve.open('cfg')
+        shelf = shelve.open('cfg',writeback=True)
         shelf['ORCServer_IP'] =  self.ui.lnOcrServIP.text()
         shelf['kernelWidth'] =  self.ui.lnKernelWidth.text()
         shelf['kernelHeight'] = self.ui.lnKernelHeight.text()
@@ -91,6 +93,9 @@ class ParamSetupWin(QWidget):
         shelf['upload_servIp']=self.ui.lnUploadServIP.text()
         shelf['upload_servPort']=self.ui.lnUploadServPort.text()
         shelf['upload_servAPI']=self.ui.lnUploadServAPI.text()
+        shelf['getCartInfo_API']=self.ui.lnGetCartInfoAPI.text()
+        shelf['uploadPosParams_API']=self.ui.lnUploadPosParamsAPI.text()
+
         # self.close()
         # self.infoBox.info("已经保存参数")
 
@@ -99,7 +104,7 @@ class ParamSetupWin(QWidget):
 
         reply=self.infoBox.warn("确定是否要恢复默认值？")
         if reply==InfoMessageBox.Yes:
-            shelf = shelve.open('cfg')
+            shelf = shelve.open('cfg',writeback=True)
             shelf['ORCServer_IP'] = '172.16.18.127'
             shelf['kernelWidth'] = '2'
             shelf['kernelHeight'] = '5'
@@ -109,7 +114,9 @@ class ParamSetupWin(QWidget):
             shelf['ocuppyMax'] = '11'
             shelf['cameraIndex']='0'
             shelf['storeFilesDays'] = '90'
-            shelf['upload_servAPI']='/'
+            shelf['upload_servAPI']='/upload/upload'
+            shelf['getCartInfo_API'] ='http://10.8.1.25:100/1814/faad013b85.json'
+            shelf['uploadPosParams_API']='http://10.8.1.25:100/1810/87c1377d8a.json'
             shelf.close()
             self.initParamData()
 

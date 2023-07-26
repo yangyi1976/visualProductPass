@@ -1,4 +1,4 @@
-import  sys,os
+import  sys,os,time
 import shelve
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot,  QProcess
@@ -17,7 +17,7 @@ from cartROIdetct import  CartROIdetector
 import  cv2
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-from CameraConf import CameraConf
+
 
 class MainWindow(QWidget):
 
@@ -48,16 +48,19 @@ class MainWindow(QWidget):
         self.delFilesTh=DelFileByDaysThread(self.storeFilesDays)
         self.delFilesTh.start()
         self.showMaximized()
+        self.ui.editFlag.setText("5")
+        # 初始化车号文本框
+        year = time.gmtime().tm_year
+        year=year%100     # get the last 2bits of year
+        yearlist = [str(year - 1), str(year), str(year + 1)]
+        self.ui.comYear.clear()
+        self.ui.comYear.addItems(yearlist)
+        self.ui.comYear.setCurrentIndex(1)
         QApplication.processEvents()
         self.setWindowTitle("废票信息可视化传递")
+
         self.initListWidget()  #初始化水平图片显示组件
         self.cap = cv2.VideoCapture(self.cameraIndex + cv2.CAP_DSHOW)  # cv2.CAP_DSHOW参数为操作系统提供的后台视频流库处理接口
-        # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(self.cameraWidth))
-        # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(self.cameraHeight))
-        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS,1)  #摄像头自动对焦
-        # self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
-        # cameraCfg=CameraConf()
-        # cameraCfg.setCamera(self.cap)
         self.th = CameraThread(self.cap)
         self.th.setCameraWH(int(self.cameraWidth),int(self.cameraHeight))  #根据配置文件设置摄像头分辨率
         self.th.setVideoSize(self.ui.lbCamera.width()-60, self.ui.lbCamera.height()-20) #按照控件尺寸缩放视频
@@ -66,7 +69,8 @@ class MainWindow(QWidget):
         self.label_mousePos = QLabel( self.ui.lbCamera,alignment=Qt.AlignCenter)
         self.label_mousePos.setStyleSheet('background-color:green; border: 1px solid black')
         self.cartNoDetector=CartROIdetector()
-        print("初始化时：",self.ui.lbCamera.width(),self.ui.lbCamera.height())
+        self.ui.editK.editingFinished.connect(self.editK_finish)
+        print("初始化时：", self.ui.lbCamera.width(), self.ui.lbCamera.height())
 
     def setWidgetsIcon(self):
         self.ui.btnSetup.setIcon(QIcon(":icon/icon/setup.ico"))
@@ -98,6 +102,8 @@ class MainWindow(QWidget):
         self.cameraIndex=int(shelf['cameraIndex'])
         self.storeFilesDays=int(shelf['storeFilesDays'])
         self.uploadUrl="http://"+shelf['upload_servIp']+":"+shelf['upload_servPort']+shelf['upload_servAPI']
+        self.uploadParamUrl=shelf['uploadPosParams_API']
+        self.cartInfoUrl=shelf['getCartInfo_API']
         self.cameraHeight=shelf['cameraHeight']
         self.cameraWidth=shelf['cameraWidth']
         shelf.close()
@@ -130,7 +136,7 @@ class MainWindow(QWidget):
     def splitCartNum(self,cartNumStr):  #将条码ID拆分成产品类型与车号
         producttype=cartNumStr[0]
         cartNum=cartNumStr[1:5]  #1-4位
-        productId=cartNumStr[6:9]
+        productId=cartNumStr[5:10]
         return producttype,cartNum
 
     def showImage(self):
@@ -176,7 +182,35 @@ class MainWindow(QWidget):
         self.pixImage=QPixmap.fromImage(self.frame)
         self.ui.lbCamera.setPixmap(self.pixImage)
         painter.end()
+    @pyqtSlot()
 
+    def editK_finish(self):
+        '''
+        2T\3T, 为40K；4T-7T，为35k。其余默认99k
+        :return:
+        '''
+        maxK=99
+        if self.ui.editK.text()=="":
+            self.setCursor(0)
+        if self.ui.editProductType.text()=="" or len(self.ui.editProductID.text())!=4:
+            QMessageBox.information(self, "错误", " 录入正确格式的产品车号！")
+            self.ui.editK.clear()
+            return
+        elif 3<int(self.ui.editProductType.text())<=7:
+            maxK=35
+        elif self.ui.editProductType.text() =='2'or self.ui.editProductType.text()=='3':
+            maxK=40
+
+        if self.ui.editK.text().isnumeric():
+            if self.ui.editK.isModified():
+                k=int(self.ui.editK.text())
+                if k>maxK:
+                    QMessageBox.information(self, "错误", "开位超过最大值 %d，请输入正确开位值！" %maxK)
+                    self.ui.editK.clear()
+            self.ui.editK.setModified(False)
+        else:
+            QMessageBox.information(self, "错误", " 请输入数字")
+            self.ui.editK.clear()
 
     def eventFilter(self, o, evn):
         '''
@@ -196,10 +230,9 @@ class MainWindow(QWidget):
                 self.startX = self.startPX - self.xoffset
         elif o is self.ui.lbCamera and evn.type() == QEvent.MouseMove:
             if self.lButtonDownFlag:
-                if self.ui.editProductID.text()=="" or self.ui.editK.text()=="":
-                    QMessageBox.information(self,"错误","请输入产品车号与开位信息")
+                if len(self.ui.editProductID.text())!=4 or self.ui.editK.text()=="":
+                    QMessageBox.information(self,"错误","请输入正确的产品车号与开位信息")
                     self.lButtonDownFlag=False
-
                     return super().eventFilter(o, evn)
                 self.endPX=evn.localPos().x()
                 self.endPY=evn.localPos().y()
@@ -274,39 +307,74 @@ class MainWindow(QWidget):
 
     @pyqtSlot()
     def on_btnDetcCart_clicked(self):
+        '''
+        根据车号ROI识别OCR车号，并从MES中获取该车号对应的车号信息。
+        :return:
+        '''
         #获取预处理后的车号ROI图像，cv2格式,并保存为文件。
         cartNumImg=self.th.cartNumCapture()
         fullName="img\\"+'cartNum.jpg'
         cv2.imwrite(fullName, cartNumImg)
         print("开始识别车号")
-        # self.postImg(r'F:\PycharmProjects\pp_ocr_py34\img\1cartNum.jpg')
-        # servIP='172.16.18.127:8089'
+        ## self.postImg(r'F:\PycharmProjects\pp_ocr_py34\img\1cartNum.jpg')
+        ## servIP='172.16.18.127:8089'
         try:
-            self.postImg(fullName,self.OCRServIP)
+            cartId=self.postImg(fullName,self.OCRServIP)
         except Exception as e:
             QMessageBox.information(self,"错误",str(e)+"\n --无法进行车号的OCR识别，请重新调整再进识别！")
         #在控件里显示车号图片
         pixImage = QPixmap(fullName)
         pixImage=pixImage.scaled(200, 190, Qt.KeepAspectRatio)
         self.ui.lbNumberpPic.setPixmap(pixImage)
-       #通过MES接口根据车号获取工序，机台以及设备
+        productType,cartNum=self.splitCartNum(cartId)  #条码ID拆分成产品类与大万号
+        self.ui.editProductType.setText(productType)
+        self.ui.editProductID.setText(cartNum)
+        #拼接完整车号
+        # carNo=self.ui.comYear.currentText()+"7"+self.ui.editFlag.text()+self.ui.editProductID.text()
+        carNo=self.getWholeCartNo()
+        # 通过MES接口根据车号获取工序，机台以及设备
+        cartInfo=self.getCartInfoByCartNo(carNo, self.cartInfoUrl)
+        print("车号：",cartInfo)
+        if cartInfo !={} :
+            w=cartInfo['currentWorkSeq']               #workseq format: "big_Seq"."producttype"."sub_Seq"
+            if w is not  None:
+                self.ui.lbWorkSeq.setText(w[w.rfind('.')+1:])   #get "sub_Seq" after the last '.'
+                self.ui.lbMachineLeader.setText( cartInfo['machineLeader'])
+            else:
+                QMessageBox.information(self, "错误", "无法获取该车号的当前工序，请确认车号是否正确！")
+        else:
+            QMessageBox.information(self, "错误", "MES系统接口异常，无法获取产品当前机台信息" )
 
-    def getCartInfoByCartNo(self,cartNo,getCartInfoUrl):
+
+    def getCartInfoByCartNo(self,cartNo,cartInfoUrl):
+        '''
+        根据车号，从MES获取车号信息：工序、几台、设备等。
+        :param cartNo:车号
+        :param getCartInfoUrl:MES接口API地址
+        :return: cartInfo 车号信息
+        '''
         headers = {'Content-type': 'application/json'}
+        param={"carno":cartNo}
         try:
-            res = requests.post(getCartInfoUrl, headers=headers, json=cartNo)
+            res = requests.post(cartInfoUrl, headers=headers, json=param)
         except requests.exceptions.ConnectionError as e:
             QMessageBox.information(self, "错误", "MES系统接口异常，无法获取车号信息，" + str(e))
             raise e
         resInfo = res.json()
-        return res.status_code
+        cartInfo={}
+        if res.status_code==200:
+            cartInfo['preWorkSeq']=resInfo['data'][0]['Location_Desc']       #前一工序
+            cartInfo['currentEquip']=resInfo['data'][0]['CurrentUnit_Desc']  #当前设备名
+            cartInfo['machineLeader']=resInfo['data'][0]['Class_Desc']       #机长
+            cartInfo['currentWorkSeq']=resInfo['data'][0]['Next_Location_Desc'] #当前工序
+        return cartInfo
 
     def postImg(self,fileName,OCRServIP):
         '''
         将保存的车号ROI图像文件发送到OCR server，进行识别
         :param fileName:
         :param OCRservIP: OCR server IP
-        :return: json格式的识别结果，['data']['raw_out'][0][1]为车号
+        :return: json格式的识别结果，['data']['raw_out'][0][1]为条码ID
         '''
         headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
@@ -332,55 +400,65 @@ class MainWindow(QWidget):
         else:
             cartNum=ocrtxt['data']['raw_out'][0][1]
             cartNum=cartNum[3:]  #获取字符串列表 ‘1、 ’ 后面的，即从第4个字符开始
-            #此处应进一步判断读入的车号格式是否正确
 
-            self.ui.editProductID.setText(cartNum)
-            return True
+            return cartNum
 
 
     @pyqtSlot()
     def on_btnUploadRIO_clicked(self):
         '''
-        调用上传接口，传递废票信息
+        1. 上传ROI图片 2.上传废票信息
         :return:
         '''
         #---fileName格式 img\车号\车号#开位
         #上传完清除listWidget列表及listParams列表
         imgInfo = {}          #要上传的ROI图像信息
         global listformatPosInfo       #字典变量可以不加全局
-        params['cart_number']=self.ui.editProductID.text()
-        params['pu_id']= '18' #self.ui.lbWorkSeq.text()
-        params['machine_id']='7704'
+        params['cart_number']=self.getWholeCartNo()
+        params['pu_id']= 18 #self.ui.lbWorkSeq.text()
+        params['machine_id']=7704
         params['captain']=self.ui.lbMachineLeader.text()
-        #params['remark']=self.ui.txtDescribe.toPlainText()
+        if len(self.listROI_fileName)==0:
+            QMessageBox.information(self, "错误", "注意，未选择废票信息截图，不能上传废票信息！，")
+            return
         for i in range(len(self.listROI_fileName)):
             imgfile=self.listROI_fileName[i]   #无法确定是否批量的，先测试传第一个图像
             fileName = (imgfile)[imgfile.rfind('\\') + 1:]  #解析出img name
             imgInfo['filename']=fileName
             imgInfo['fullpath']=imgfile+'.jpg'
             imgInfo['info']=""
-            print("上传服务器接口：",self.uploadUrl)
+            print("上传废票信息服务器接口：",self.uploadUrl)
             params['format_pos']=listformatPosInfo[i]['format_pos']
             params['remark']=listformatPosInfo[i]['remark']
             imgSaveUrl= self.uploadImgToQualitySys(imgInfo,self.uploadUrl)
             if  imgSaveUrl is not None:
-                print(imgSaveUrl)
                 params['url']=imgSaveUrl   #图像上传保存地址
             else:
                 QMessageBox.information(self, "错误", "质量信息系统接口异常，无法上传图像数据，" +self.uploadUrl)
                 return
-            self.uploadParamUrl="http://10.8.1.25:100/1810/87c1377d8a.json"
-            if self.uplaodImgParamToQualitySys(params,self.uploadParamUrl)=='200':
-                QMessageBox.information(self, "信息", "废票数据传递到质量信息系统成功，")
+            if self.uplaodImgParamToQualitySys(params,self.uploadParamUrl)==200:
+                uploadOk=True
             else:
-                QMessageBox.information(self, "错误", "废票数据未传递到质量信息系统，")
+                uploadOk=False
+                QMessageBox.information(self, "错误", "废票数据未传递到质量信息系统")
                 return
+        if uploadOk:
+            QMessageBox.information(self, "信息", "废票数据传递到质量信息系统成功，")
         self.listROI_fileName=[]
         del listformatPosInfo
         self.ui.txtDescribe.clear()
         self.ui.lsImgROIWidget.clear()
         # self.ui.lbMachineLeader.clear()
         # self.ui.lbWorkSeq.clear()
+
+    def getWholeCartNo(self):
+        '''
+        connect the whole 8 bits cartNo
+        :return: whole 8bits cartNo
+        '''
+        wholeCartNo=self.ui.comYear.currentText()+self.ui.editProductType.text()+\
+                    self.ui.editFlag.text()+self.ui.editProductID.text()
+        return wholeCartNo
 
     def uploadImgToQualitySys(self,imgInfo,uploadUrl):
         '''
@@ -414,7 +492,7 @@ class MainWindow(QWidget):
 
     def uplaodImgParamToQualitySys(self,params,uploadParamUrl):
         '''
-        上传图像参数数据（ 到质量平台
+        上传图像参数数据到质量平台
         :param params: 图像参数（车号、开位、工序、设备、机长、描述、图片地址）
         :param uploadParamUrl:质量参数写入接口
         :return:res.status_code 200

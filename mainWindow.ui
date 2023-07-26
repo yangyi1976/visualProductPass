@@ -148,57 +148,24 @@ border-radius:7px;</string>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4" rowstretch="2,1,2,1" columnstretch="2,7,1" columnminimumwidth="0,0,0">
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="styleSheet">
-             <string notr="true">font: 75 14pt &quot;微软雅黑&quot;;</string>
-            </property>
-            <property name="text">
-             <string>机长</string>
-            </property>
-           </widget>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_4" rowstretch="2,1,2,1,0" columnstretch="2,7,1" columnminimumwidth="0,0,0">
           <item row="2" column="1">
            <widget class="QLabel" name="lbMachineLeader">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(48, 48, 85);
 border-radius:7px;
 border:1px solid green;
 color: rgb(0, 255, 255);
-font: 36pt &quot;幼圆&quot;;</string>
+font: 32pt &quot;幼圆&quot;;</string>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>*机台</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="styleSheet">
-             <string notr="true"> 
-
-font: 75 14pt &quot;微软雅黑&quot;;
- </string>
-            </property>
-            <property name="text">
-             <string>工序</string>
             </property>
            </widget>
           </item>
@@ -214,6 +181,42 @@ font: 75 14pt &quot;微软雅黑&quot;;
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="styleSheet">
+             <string notr="true">font: 75 14pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>机台</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="styleSheet">
+             <string notr="true"> 
+
+font: 75 14pt &quot;微软雅黑&quot;;
+ </string>
+            </property>
+            <property name="text">
+             <string>工序</string>
+            </property>
+           </widget>
           </item>
           <item row="0" column="1">
            <widget class="QLabel" name="lbWorkSeq">
@@ -242,18 +245,37 @@ border:1px solid green;</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer">
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_3">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>10</width>
+              <width>20</width>
               <height>20</height>
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="4" column="1">
+           <widget class="QPushButton" name="btnGetWorkseqInfo">
+            <property name="styleSheet">
+             <string notr="true"> 
+
+QPushButton{background-color: rgb(0, 177, 85);}
+:pressed
+{ 
+ padding-left:3px;
+ padding-top:3px;
+}
+ 
+</string>
+            </property>
+            <property name="text">
+             <string>手工获取工序信息</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -319,7 +341,8 @@ border:1px solid green;</string>
             <item row="0" column="2">
              <widget class="QLabel" name="label_11">
               <property name="styleSheet">
-               <string notr="true">border-bottom:1px solid white;</string>
+               <string notr="true">border-bottom:1px solid white;
+</string>
               </property>
               <property name="text">
                <string>标记</string>
@@ -351,11 +374,14 @@ font: 50pt &quot;黑体&quot;;
 
 </string>
               </property>
+              <property name="editable">
+               <bool>true</bool>
+              </property>
               <property name="currentText">
-               <string>23</string>
+               <string/>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>-1</number>
               </property>
               <property name="maxCount">
                <number>5</number>
@@ -363,21 +389,6 @@ font: 50pt &quot;黑体&quot;;
               <property name="insertPolicy">
                <enum>QComboBox::InsertAtBottom</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>22</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>23</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>24</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="3" column="0">
@@ -389,8 +400,7 @@ font: 50pt &quot;黑体&quot;;
                </sizepolicy>
               </property>
               <property name="styleSheet">
-               <string notr="true"> 
-</string>
+               <string notr="true"/>
               </property>
               <property name="text">
                <string>开位</string>
@@ -403,7 +413,8 @@ font: 50pt &quot;黑体&quot;;
             <item row="0" column="0">
              <widget class="QLabel" name="label_5">
               <property name="styleSheet">
-               <string notr="true">border-bottom:1px solid white;</string>
+               <string notr="true">border-bottom:1px solid white;
+</string>
               </property>
               <property name="text">
                <string>产品年份</string>
@@ -475,14 +486,17 @@ color: rgb(81, 81, 81);
 font: 40pt &quot;黑体&quot;;
 border-top:1px solid white;</string>
               </property>
+              <property name="inputMask">
+               <string/>
+              </property>
               <property name="maxLength">
-               <number>2</number>
+               <number>32767</number>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
               <property name="placeholderText">
-               <string>?k</string>
+               <string>?K</string>
               </property>
               <property name="cursorMoveStyle">
                <enum>Qt::VisualMoveStyle</enum>
@@ -516,7 +530,8 @@ border:0px solid rgb(100,100,100);
             <item row="0" column="1">
              <widget class="QLabel" name="label_10">
               <property name="styleSheet">
-               <string notr="true">border-bottom:1px solid white;</string>
+               <string notr="true">border-bottom:1px solid white;
+</string>
               </property>
               <property name="text">
                <string>品种</string>
@@ -619,7 +634,7 @@ background-color: rgb(255, 255, 255);</string>
 background-color: rgb(0, 0, 0);</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#19c80c;&quot;&gt;未发现摄像头。。。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#19c80c;&quot;&gt;打开摄像头。。。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

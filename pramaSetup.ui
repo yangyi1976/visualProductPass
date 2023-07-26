@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>971</width>
-    <height>676</height>
+    <width>1002</width>
+    <height>757</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@ text-align:center;
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>360</y>
+     <y>450</y>
      <width>381</width>
      <height>211</height>
     </rect>
@@ -143,7 +143,7 @@ text-align:center;
     <rect>
      <x>20</x>
      <y>99</y>
-     <width>911</width>
+     <width>961</width>
      <height>21</height>
     </rect>
    </property>
@@ -166,7 +166,7 @@ border-top:1px solid white;
    <property name="geometry">
     <rect>
      <x>260</x>
-     <y>590</y>
+     <y>670</y>
      <width>388</width>
      <height>81</height>
     </rect>
@@ -248,7 +248,7 @@ border-top:1px solid white;
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>360</y>
+     <y>450</y>
      <width>351</width>
      <height>211</height>
     </rect>
@@ -358,6 +358,12 @@ text-aling:center;</string>
     </item>
     <item>
      <widget class="QLineEdit" name="lnKernelWidth">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="maximumSize">
        <size>
         <width>80</width>
@@ -394,7 +400,7 @@ text-aling:center;</string>
     <item>
      <widget class="QLineEdit" name="lnKernelHeight">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -421,7 +427,7 @@ text-aling:center;</string>
      <x>50</x>
      <y>180</y>
      <width>401</width>
-     <height>40</height>
+     <height>51</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -556,23 +562,26 @@ background-color: rgb(48, 48, 85);
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>51</x>
+     <x>50</x>
      <y>241</y>
      <width>401</width>
-     <height>38</height>
+     <height>51</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
     <item>
      <widget class="QLabel" name="label_8">
       <property name="styleSheet">
        <string notr="true">font: 16pt &quot;黑体&quot;;</string>
       </property>
       <property name="text">
-       <string>上传Server IP:</string>
+       <string>上传图像 IP:</string>
       </property>
      </widget>
     </item>
@@ -597,13 +606,13 @@ background-color: rgb(48, 48, 85);
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>470</x>
      <y>240</y>
-     <width>281</width>
-     <height>38</height>
+     <width>171</width>
+     <height>51</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -613,22 +622,29 @@ background-color: rgb(48, 48, 85);
        <string notr="true">font: 16pt &quot;黑体&quot;;</string>
       </property>
       <property name="text">
-       <string>上传Server Port：</string>
+       <string> Port：</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lnUploadServPort"/>
+     <widget class="QLineEdit" name="lnUploadServPort">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>480</x>
      <y>120</y>
      <width>311</width>
-     <height>38</height>
+     <height>51</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -643,7 +659,14 @@ background-color: rgb(48, 48, 85);
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lnFilesStoreDays"/>
+     <widget class="QLineEdit" name="lnFilesStoreDays">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_13">
@@ -657,13 +680,13 @@ background-color: rgb(48, 48, 85);
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>51</x>
-     <y>300</y>
-     <width>701</width>
-     <height>41</height>
+     <x>640</x>
+     <y>240</y>
+     <width>311</width>
+     <height>51</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -673,7 +696,7 @@ background-color: rgb(48, 48, 85);
        <string notr="true">font: 16pt &quot;黑体&quot;;</string>
       </property>
       <property name="text">
-       <string>上传Server API:</string>
+       <string>API:</string>
       </property>
      </widget>
     </item>
@@ -681,6 +704,88 @@ background-color: rgb(48, 48, 85);
      <widget class="QLineEdit" name="lnUploadServAPI">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>310</y>
+     <width>811</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>1</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_14">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>上传开位信息API接口：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lnUploadPosParamsAPI">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>370</y>
+     <width>811</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_12">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>1</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_17">
+      <property name="styleSheet">
+       <string notr="true">font: 16pt &quot;黑体&quot;;</string>
+      </property>
+      <property name="text">
+       <string>MES车号信息API接口：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lnGetCartInfoAPI">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
