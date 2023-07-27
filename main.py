@@ -190,8 +190,6 @@ class MainWindow(QWidget):
         :return:
         '''
         maxK=99
-        if self.ui.editK.text()=="":
-            self.setCursor(0)
         if self.ui.editProductType.text()=="" or len(self.ui.editProductID.text())!=4:
             QMessageBox.information(self, "错误", " 录入正确格式的产品车号！")
             self.ui.editK.clear()
@@ -200,7 +198,6 @@ class MainWindow(QWidget):
             maxK=35
         elif self.ui.editProductType.text() =='2'or self.ui.editProductType.text()=='3':
             maxK=40
-
         if self.ui.editK.text().isnumeric():
             if self.ui.editK.isModified():
                 k=int(self.ui.editK.text())
@@ -208,7 +205,7 @@ class MainWindow(QWidget):
                     QMessageBox.information(self, "错误", "开位超过最大值 %d，请输入正确开位值！" %maxK)
                     self.ui.editK.clear()
             self.ui.editK.setModified(False)
-        else:
+        elif self.ui.editK.text() !="":
             QMessageBox.information(self, "错误", " 请输入数字")
             self.ui.editK.clear()
 
@@ -333,13 +330,13 @@ class MainWindow(QWidget):
         # carNo=self.ui.comYear.currentText()+"7"+self.ui.editFlag.text()+self.ui.editProductID.text()
         carNo=self.getWholeCartNo()
         # 通过MES接口根据车号获取工序，机台以及设备
-        cartInfo=self.getCartInfoByCartNo(carNo, self.cartInfoUrl)
-        print("车号：",cartInfo)
-        if cartInfo !={} :
-            w=cartInfo['currentWorkSeq']               #workseq format: "big_Seq"."producttype"."sub_Seq"
+        self.cartInfo=self.getCartInfoByCartNo(carNo, self.cartInfoUrl)
+        print("车号：",self.cartInfo)
+        if self.cartInfo !={} :
+            w=self.cartInfo['currentWorkSeq']               #workseq format: "big_Seq"."producttype"."sub_Seq"
             if w is not  None:
                 self.ui.lbWorkSeq.setText(w[w.rfind('.')+1:])   #get "sub_Seq" after the last '.'
-                self.ui.lbMachineLeader.setText( cartInfo['machineLeader'])
+                self.ui.lbMachineLeader.setText( self.cartInfo['machineLeader'])
             else:
                 QMessageBox.information(self, "错误", "无法获取该车号的当前工序，请确认车号是否正确！")
         else:
@@ -364,7 +361,7 @@ class MainWindow(QWidget):
         cartInfo={}
         if res.status_code==200:
             cartInfo['preWorkSeq']=resInfo['data'][0]['Location_Desc']       #前一工序
-            cartInfo['currentEquip']=resInfo['data'][0]['CurrentUnit_Desc']  #当前设备名
+            cartInfo['currentEquipment']=resInfo['data'][0]['CurrentUnit_Desc']  #当前设备名
             cartInfo['machineLeader']=resInfo['data'][0]['Class_Desc']       #机长
             cartInfo['currentWorkSeq']=resInfo['data'][0]['Next_Location_Desc'] #当前工序
         return cartInfo
@@ -403,6 +400,26 @@ class MainWindow(QWidget):
 
             return cartNum
 
+    @pyqtSlot()
+    def on_btnGetWorkseqInfo_clicked(self):
+        '''
+        当可以根据手工录入的车号，获取工序信息。
+        :return:
+        '''
+        if self.ui.editProductType.text()=="" or self.ui.editProductID.text()=="":
+            QMessageBox.information(self, "错误", "还未录入车号信息！")
+        carNo = self.getWholeCartNo()
+        # 通过MES接口根据车号获取工序，机台以及设备
+        self.cartInfo = self.getCartInfoByCartNo(carNo, self.cartInfoUrl)
+        if self.cartInfo !={} :
+            w=self.cartInfo['currentWorkSeq']               #workseq format: "big_Seq"."producttype"."sub_Seq"
+            if w is not  None:
+                self.ui.lbWorkSeq.setText(w[w.rfind('.')+1:])   #get "sub_Seq" after the last '.'
+                self.ui.lbMachineLeader.setText( self.cartInfo['machineLeader'])
+            else:
+                QMessageBox.information(self, "错误", "无法获取该车号的当前工序，请确认车号是否正确！")
+        else:
+            QMessageBox.information(self, "错误", "MES系统接口异常，无法获取产品当前机台信息" )
 
     @pyqtSlot()
     def on_btnUploadRIO_clicked(self):
@@ -416,10 +433,16 @@ class MainWindow(QWidget):
         global listformatPosInfo       #字典变量可以不加全局
         params['cart_number']=self.getWholeCartNo()
         params['pu_id']= 18 #self.ui.lbWorkSeq.text()
-        params['machine_id']=7704
+        params['machine_id']=7704  #self.cartInfo['currentEquipment']
         params['captain']=self.ui.lbMachineLeader.text()
+        print(self.ui.lbWorkSeq.text())
+        print(self.cartInfo['currentEquipment'])
+
         if len(self.listROI_fileName)==0:
             QMessageBox.information(self, "错误", "注意，未选择废票信息截图，不能上传废票信息！，")
+            return
+        if self.ui.txtDescribe.toPlainText()=="":
+            QMessageBox.information(self, "错误", "请输入说明信息！，")
             return
         for i in range(len(self.listROI_fileName)):
             imgfile=self.listROI_fileName[i]   #无法确定是否批量的，先测试传第一个图像
@@ -620,9 +643,9 @@ if __name__=="__main__":
     #
     # sys.exit(app.exec_())
     current_exit_code = 2023
-    params={}
-    formatPosInfo = {}
-    listformatPosInfo=[]
+    params={}                  # ROI info ，包含车号、机长、开位、工序、设备名称、说明信息
+    formatPosInfo = {}         # each k info，includ k-pos,remark
+    listformatPosInfo=[]       # k list
     while current_exit_code == 2023:
         app = QApplication(sys.argv)
         main_window = MainWindow()
