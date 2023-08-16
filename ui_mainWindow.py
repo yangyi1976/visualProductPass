@@ -460,7 +460,7 @@ class Ui_Form(object):
         self.label_11.setText(_translate("Form", "标记"))
         self.label_7.setText(_translate("Form", "开位"))
         self.label_5.setText(_translate("Form", "产品年份"))
-        self.txtDescribe.setPlaceholderText(_translate("Form", "请输入说明"))
+        self.txtDescribe.setPlaceholderText(_translate("Form", "请输入说明（120个字以内）"))
         self.editK.setPlaceholderText(_translate("Form", "?K"))
         self.label_10.setText(_translate("Form", "品种"))
         self.label_9.setText(_translate("Form", "车号"))

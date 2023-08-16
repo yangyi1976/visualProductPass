@@ -256,7 +256,7 @@ class MainWindow(QWidget):
                 imgFileName=str(self.ui.editProductID.text()+"#"+self.ui.editK.text())
                 # global  params
                 formatPosInfo['format_pos'] = self.ui.editK.text()
-                formatPosInfo['remark'] =self.ui.txtDescribe.toPlainText()
+                formatPosInfo['remark'] = self.ui.txtDescribe.toPlainText()
                 fileFullPath = dirName+"\\" + imgFileName
                 imgROI = self.frame.copy(startX, startPY, ROIw, ROIh)
                 imgROI.save(fileFullPath+".jpg","JPG",100) #创建ROI文件，重名就覆盖
@@ -316,7 +316,7 @@ class MainWindow(QWidget):
         ## self.postImg(r'F:\PycharmProjects\pp_ocr_py34\img\1cartNum.jpg')
         ## servIP='172.16.18.127:8089'
         try:
-            cartId=self.postImg(fullName,self.OCRServIP)
+            cartId=self.postImg(fullName,self.OCRServIP) #发送图片到ocr服务器
         except Exception as e:
             QMessageBox.information(self,"错误",str(e)+"\n --无法进行车号的OCR识别，请重新调整再进识别！")
         #在控件里显示车号图片
@@ -361,6 +361,7 @@ class MainWindow(QWidget):
         cartInfo={}
         if res.status_code==200:
             cartInfo['preWorkSeq']=resInfo['data'][0]['Location_Desc']       #前一工序
+            cartInfo['currentEquipmentId']=resInfo['data'][0]['machine_id']   #当前设备ID
             cartInfo['currentEquipment']=resInfo['data'][0]['CurrentUnit_Desc']  #当前设备名
             cartInfo['machineLeader']=resInfo['data'][0]['Class_Desc']       #机长
             cartInfo['currentWorkSeq']=resInfo['data'][0]['Next_Location_Desc'] #当前工序
@@ -432,8 +433,9 @@ class MainWindow(QWidget):
         imgInfo = {}          #要上传的ROI图像信息
         global listformatPosInfo       #字典变量可以不加全局
         params['cart_number']=self.getWholeCartNo()
-        params['pu_id']= 18 #self.ui.lbWorkSeq.text()
-        params['machine_id']=7704  #self.cartInfo['currentEquipment']
+        params['pu_desc']= '胶一印' #self.ui.lbWorkSeq.text()
+        params['machine_id']=7704  #self.cartInfo['currentEquipmentId']
+        params['machine_name']=self.cartInfo['currentEquipment']
         params['captain']=self.ui.lbMachineLeader.text()
         print(self.ui.lbWorkSeq.text())
         print(self.cartInfo['currentEquipment'])
@@ -450,7 +452,7 @@ class MainWindow(QWidget):
             imgInfo['filename']=fileName
             imgInfo['fullpath']=imgfile+'.jpg'
             imgInfo['info']=""
-            print("上传废票信息服务器接口：",self.uploadUrl)
+            print("上传废票信息说明：",listformatPosInfo[i]['remark'])
             params['format_pos']=listformatPosInfo[i]['format_pos']
             params['remark']=listformatPosInfo[i]['remark']
             imgSaveUrl= self.uploadImgToQualitySys(imgInfo,self.uploadUrl)
@@ -459,7 +461,7 @@ class MainWindow(QWidget):
             else:
                 QMessageBox.information(self, "错误", "质量信息系统接口异常，无法上传图像数据，" +self.uploadUrl)
                 return
-            if self.uplaodImgParamToQualitySys(params,self.uploadParamUrl)==200:
+            if self.uplaodImgParamToQualitySys(params,self.uploadParamUrl)==200:    #上传废票信息到质量系统
                 uploadOk=True
             else:
                 uploadOk=False
@@ -529,6 +531,24 @@ class MainWindow(QWidget):
         # resInfo = res.json()
         return res.status_code
 
+    @pyqtSlot()
+    def on_txtDescribe_textChanged(self):
+        '''
+        限制说明文本框字数不能超过最大值（数据库该字段为255字符，对应汉字127个。）
+        :return:
+        '''
+        txt=(self.ui.txtDescribe.toPlainText())
+        txtlength=len(txt)
+        maxlen=120
+        if txtlength>maxlen:
+            cursor = self.ui.txtDescribe.textCursor()
+            # 设置文本框的值
+            self.ui.txtDescribe.setPlainText(txt[0:maxlen])
+            # 设置文本框光标的位置
+            cursor.setPosition(maxlen, cursor.MoveAnchor)
+            # 设置光标
+            self.ui.txtDescribe.setTextCursor(cursor)
+            QMessageBox.information(self, "错误", " 字数太多了，达到最大值了！")
 
     @pyqtSlot()
     def on_btnUpLocal_clicked(self):

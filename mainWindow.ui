@@ -464,7 +464,7 @@ border:0px solid rgb(100,100,100);
                </sizepolicy>
               </property>
               <property name="placeholderText">
-               <string>请输入说明</string>
+               <string>请输入说明（120个字以内）</string>
               </property>
              </widget>
             </item>

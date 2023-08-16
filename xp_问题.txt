@@ -24,3 +24,4 @@ videocapture(0,cv2.cap_dshow) 改为（0+cv2.cap_dshow)
 不加-w参数，可以出现控制台窗口，这样，就可以看到调试信息。
 -D  打包成依赖多个文件
 -F  打包成一个文件。
+
