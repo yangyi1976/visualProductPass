@@ -1,8 +1,6 @@
 from configparser import ConfigParser
 import cv2
 from PyQt5.QtWidgets import QMessageBox, QDialog
-
-
 class CameraConf:
     def getCameraConf(self):
         '''

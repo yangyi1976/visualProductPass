@@ -1,9 +1,7 @@
 import cv2 as cv
 import shelve
 import numpy as np
-
 class CartROIdetector(object ):
-
     def getCartROIimg(self,src_image):
         '''
         # 将车号文本区域图像提取出
@@ -79,7 +77,7 @@ class CartROIdetector(object ):
 
         #转换为灰度图像
         img_src1 = cv.cvtColor(img_src, cv.COLOR_BGR2GRAY)
-        img_src1 = cv.equalizeHist(img_src1) #直方图均衡
+        # img_src1 = cv.equalizeHist(img_src1) #直方图均衡
 
         img_src=cv.blur(img_src1,(3,3)) #均值滤波
         # img_src=cv.GaussianBlur(img_src1,(3,3),0,0)

@@ -3,7 +3,7 @@ import shelve
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt, QSize, QPoint, pyqtSlot,  QProcess
 from PyQt5.QtWidgets import QApplication, QWidget, QListView, QListWidgetItem, QLabel, QMessageBox, QMenu, QAction, \
-    QFileDialog
+    QFileDialog,qApp
 
 from CameraPropSetupDlg import CameraPropSetupDlg
 from ui_mainWindow import Ui_Form
@@ -123,7 +123,7 @@ class MainWindow(QWidget):
         print("del img list item:",currentImgIdx)
         os.remove(self.listROI_fileName[currentImgIdx] + ".jpg")
         del self.listROI_fileName[currentImgIdx]
-        del listformatPosInfo[currentImgIdx]   #清空开位信息列表
+        del listformatPosInfo[currentImgIdx]   #del pos ino in list
         # currentItem = self.ui.lsImgROIWidget.currentItem()
         # self.ui.lsImgROIWidget.removeItemWidget(currentItem)
         self.ui.lsImgROIWidget.takeItem(currentImgIdx)  #删除listWidget里选择的item
@@ -227,8 +227,9 @@ class MainWindow(QWidget):
                 self.startX = self.startPX - self.xoffset
         elif o is self.ui.lbCamera and evn.type() == QEvent.MouseMove:
             if self.lButtonDownFlag:
-                if len(self.ui.editProductID.text())!=4 or self.ui.editK.text()=="":
-                    QMessageBox.information(self,"错误","请输入正确的产品车号与开位信息")
+                if len(self.ui.editProductID.text())!=4 or self.ui.editK.text()=="" or \
+                        self.ui.txtDescribe.toPlainText()=="":
+                    QMessageBox.information(self,"错误","请输入正确的产品车号与开位信息、或者说明信息")
                     self.lButtonDownFlag=False
                     return super().eventFilter(o, evn)
                 self.endPX=evn.localPos().x()
@@ -255,6 +256,7 @@ class MainWindow(QWidget):
                     os.makedirs(dirName)
                 imgFileName=str(self.ui.editProductID.text()+"#"+self.ui.editK.text())
                 # global  params
+                formatPosInfo = {}
                 formatPosInfo['format_pos'] = self.ui.editK.text()
                 formatPosInfo['remark'] = self.ui.txtDescribe.toPlainText()
                 fileFullPath = dirName+"\\" + imgFileName
@@ -352,8 +354,12 @@ class MainWindow(QWidget):
         '''
         headers = {'Content-type': 'application/json'}
         param={"carno":cartNo}
+        global session
         try:
-            res = requests.post(cartInfoUrl, headers=headers, json=param)
+            start=time.time()
+            res = session.post(cartInfoUrl, headers=headers, json=param)
+            end = time.time()
+            print("GET-BY获取MES工序信息时间:：", (end - start))
         except requests.exceptions.ConnectionError as e:
             QMessageBox.information(self, "错误", "MES系统接口异常，无法获取车号信息，" + str(e))
             raise e
@@ -409,16 +415,21 @@ class MainWindow(QWidget):
         '''
         if self.ui.editProductType.text()=="" or self.ui.editProductID.text()=="":
             QMessageBox.information(self, "错误", "还未录入车号信息！")
+        start = time.time()
         carNo = self.getWholeCartNo()
+        end = time.time()
+        print("拼接MES车号时间:：", (end - start))
         # 通过MES接口根据车号获取工序，机台以及设备
+
         self.cartInfo = self.getCartInfoByCartNo(carNo, self.cartInfoUrl)
+
         if self.cartInfo !={} :
             w=self.cartInfo['currentWorkSeq']               #workseq format: "big_Seq"."producttype"."sub_Seq"
             if w is not  None:
                 self.ui.lbWorkSeq.setText(w[w.rfind('.')+1:])   #get "sub_Seq" after the last '.'
                 self.ui.lbMachineLeader.setText( self.cartInfo['machineLeader'])
             else:
-                QMessageBox.information(self, "错误", "无法获取该车号的当前工序，请确认车号是否正确！")
+                QMessageBox.information(self, "错误", "currentWorkSeq is none，无法获取该车号的当前工序，请确认车号是否正确！")
         else:
             QMessageBox.information(self, "错误", "MES系统接口异常，无法获取产品当前机台信息" )
 
@@ -434,11 +445,11 @@ class MainWindow(QWidget):
         global listformatPosInfo       #字典变量可以不加全局
         params['cart_number']=self.getWholeCartNo()
         params['pu_desc']= '胶一印' #self.ui.lbWorkSeq.text()
-        params['machine_id']=7704  #self.cartInfo['currentEquipmentId']
-        params['machine_name']=self.cartInfo['currentEquipment']
+        params['machine_id']=self.cartInfo['currentEquipmentId'] if hasattr(self,"currentEquipmentId")  else 7704
+        params['machine_name']=self.cartInfo['currentEquipment'] if hasattr(self,"cartInfo")  else ""
         params['captain']=self.ui.lbMachineLeader.text()
-        print(self.ui.lbWorkSeq.text())
-        print(self.cartInfo['currentEquipment'])
+        # print(self.ui.lbWorkSeq.text())
+        # print(self.cartInfo['currentEquipment'])
 
         if len(self.listROI_fileName)==0:
             QMessageBox.information(self, "错误", "注意，未选择废票信息截图，不能上传废票信息！，")
@@ -447,7 +458,7 @@ class MainWindow(QWidget):
             QMessageBox.information(self, "错误", "请输入说明信息！，")
             return
         for i in range(len(self.listROI_fileName)):
-            imgfile=self.listROI_fileName[i]   #无法确定是否批量的，先测试传第一个图像
+            imgfile=self.listROI_fileName[i]
             fileName = (imgfile)[imgfile.rfind('\\') + 1:]  #解析出img name
             imgInfo['filename']=fileName
             imgInfo['fullpath']=imgfile+'.jpg'
@@ -455,13 +466,22 @@ class MainWindow(QWidget):
             print("上传废票信息说明：",listformatPosInfo[i]['remark'])
             params['format_pos']=listformatPosInfo[i]['format_pos']
             params['remark']=listformatPosInfo[i]['remark']
-            imgSaveUrl= self.uploadImgToQualitySys(imgInfo,self.uploadUrl)
+            try:
+                start=time.time()
+                imgSaveUrl= self.uploadImgToQualitySys(imgInfo,self.uploadUrl)
+                end = time.time()
+                print("上传图片时长时间:：", (end - start))
+            except:
+                return
             if  imgSaveUrl is not None:
                 params['url']=imgSaveUrl   #图像上传保存地址
             else:
                 QMessageBox.information(self, "错误", "质量信息系统接口异常，无法上传图像数据，" +self.uploadUrl)
                 return
+            start=time.time()
             if self.uplaodImgParamToQualitySys(params,self.uploadParamUrl)==200:    #上传废票信息到质量系统
+                end = time.time()
+                print("上传图像参数时长:：", (end - start))
                 uploadOk=True
             else:
                 uploadOk=False
@@ -470,7 +490,8 @@ class MainWindow(QWidget):
         if uploadOk:
             QMessageBox.information(self, "信息", "废票数据传递到质量信息系统成功，")
         self.listROI_fileName=[]
-        del listformatPosInfo
+        # del listformatPosInfo
+        listformatPosInfo.clear()
         self.ui.txtDescribe.clear()
         self.ui.lsImgROIWidget.clear()
         # self.ui.lbMachineLeader.clear()
@@ -496,17 +517,20 @@ class MainWindow(QWidget):
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
             # 'Content-type':'multipart/form-data',
             'X-Requested-With': 'XMLHttpRequest'}
-
-        imgData = {'file': (imgInfo['filename'], open(imgInfo['fullpath'], 'rb'), 'image/jpeg'), 'info': imgInfo['info']}
+        imgFile=open(imgInfo['fullpath'], 'rb')
+        imgData = {'file': (imgInfo['filename'], imgFile,  'image/jpeg'), 'info': imgInfo['info']}
         imgData_encoder = MultipartEncoder(imgData)
         headers['Content-type'] = imgData_encoder.content_type
-        # data = {'compress': '200'}  可以不用request_toolbelt库以及Content-type,而使用下面一行代码
+        # data = {'compress': '200'}  可以不用request_to
+        # olbelt库以及Content-type,而使用下面一行代码
         # r = requests.post(post_url, headers=headers, files=imgData_encoder,data=data)
+        global session
         try:
-            res = requests.post(uploadUrl, headers=headers, data=imgData_encoder)
+            res = session.post(uploadUrl, headers=headers, data=imgData_encoder)
             res.raise_for_status() #判断网络连接状态，错误就抛出异常
         except requests.exceptions.ConnectionError as e:
             QMessageBox.information(self,"错误","质量信息系统接口异常，无法上传图像，"+str(e))
+            imgFile.close()
             raise e
         resInfo = res.json()
          
@@ -523,13 +547,14 @@ class MainWindow(QWidget):
         :return:res.status_code 200
         '''
         headers = {'Content-type': 'application/json'}
+        global session
         try:
-            res=requests.post(uploadParamUrl,headers=headers,json=params)
+            res=session.post(uploadParamUrl,headers=headers,json=params)
         except requests.exceptions.ConnectionError as e:
-            QMessageBox.information(self, "错误", "质量信息系统接口异常，无法上传废票信息数据，" + str(e))
+            QMessageBox.information(self, "错误", "远程服务异常，获取升级信息失败，" + str(e))
             raise e
         # resInfo = res.json()
-        return res.status_code
+        return res.text
 
     @pyqtSlot()
     def on_txtDescribe_textChanged(self):
@@ -548,7 +573,7 @@ class MainWindow(QWidget):
             cursor.setPosition(maxlen, cursor.MoveAnchor)
             # 设置光标
             self.ui.txtDescribe.setTextCursor(cursor)
-            QMessageBox.information(self, "错误", " 字数太多了，达到最大值了！")
+            QMessageBox.information(self, "错误", " 字数太多了，不能超过120个字！")
 
     @pyqtSlot()
     def on_btnUpLocal_clicked(self):
@@ -558,12 +583,19 @@ class MainWindow(QWidget):
         '''
         # curPath=QDir.currentPath()
         curPath="C:\\Users\\Administrator\\Desktop"
-        filt="图片文件(*.jpg *.jpeg *.png);;所有文件(*.*);"
-        fileList,filtUsed=QFileDialog.getOpenFileNames(self,"选择一个图片文件",curPath,filt)
+        filt="图片文件(*.jpg *.jpeg );;所有文件(*.*);"
+        fileList,filtereUsed=QFileDialog.getOpenFileNames(self,"选择一个图片文件",curPath,filt)
+
         for i in range(len(fileList)):
             fileName=(fileList[i])[:fileList[i].find(".")]
             fileName=fileName.replace("/","\\")
             self.listROI_fileName.append(fileName)
+            formatPosInfo = {}
+            formatPosInfo['format_pos'] = self.ui.editK.text()   #目前还无法确定需求是否需要针对每个本地图片进行开位赋值
+            formatPosInfo['remark'] = self.ui.txtDescribe.toPlainText()
+            listformatPosInfo.append(formatPosInfo)
+
+        self.freshImgListWidget(self.listROI_fileName)
 
     def freshImgListWidget(self, imgFileList):
         '''
@@ -604,12 +636,10 @@ class MainWindow(QWidget):
 
     def rebootApp(self):
         print("reboot.......")
-        # python = sys.executable
-        # print(python)
-        # os.execl(python,python,   *sys.argv)
-        QApplication.quit()
-        status = QProcess.startDetached(sys.executable, sys.argv)
-        print(status)
+        # QApplication.quit()
+        # status = QProcess.startDetached(sys.executable, sys.argv)
+        # print(status)
+        qApp.exit(2023)
 
     @pyqtSlot()
     def on_btnCounterRot_clicked(self):
@@ -664,12 +694,19 @@ if __name__=="__main__":
     # sys.exit(app.exec_())
     current_exit_code = 2023
     params={}                  # ROI info ，包含车号、机长、开位、工序、设备名称、说明信息
-    formatPosInfo = {}         # each k info，includ k-pos,remark
+    # formatPosInfo = {}         # each k info，includ k-pos,remark
     listformatPosInfo=[]       # k list
+    session=requests.Session()
+
     while current_exit_code == 2023:
+        print("开始事件循环")
         app = QApplication(sys.argv)
         main_window = MainWindow()
         main_window.show()
-        sys.exit(app.exec_())
-
-
+        current_exit_code=app.exec_()
+        del main_window
+        app=None
+        # code=app.exec_()
+        print("退出码：",current_exit_code)
+        # sys.exit(code)
+    sys.exit(current_exit_code)

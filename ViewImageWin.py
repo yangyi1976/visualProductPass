@@ -20,9 +20,6 @@ class ViewImageWidget(QWidget):
       self.layout = QVBoxLayout(self)
       self.layout.addWidget(self.show_label)
 
-
-
-
 if __name__=="__main__":
   import sys
   app = QApplication(sys.argv)

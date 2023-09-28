@@ -1,0 +1,15 @@
+{
+  "update_url":"127.0.0.1",
+  "app":
+	{
+		"version": 1, -- 版本号
+		"url": "http://xxx/HboMonitor", -- 远程待更新文件地址
+		"is_run":true  -- 是否需要立即运行
+	},
+	"HboHello":
+	{
+		"version": 2,
+		"url": "http://xx/HboHello",
+		"is_run":false
+	}
+}

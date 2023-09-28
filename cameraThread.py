@@ -76,7 +76,7 @@ class CameraThread(QThread):#采用线程来播放视频
                 img = convertToQtFormat.scaled(self.videoW, self.videoH, Qt.KeepAspectRatio)
 
                 self.flashPixmap.emit(img)
-                time.sleep(0.02) #控制视频播放的速度
+                time.sleep(0.1) #控制视频播放的速度
             else:
                 break
 

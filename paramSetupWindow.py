@@ -1,13 +1,11 @@
 import sys
 import shelve
-
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtCore import Qt, pyqtSlot, QSize ,pyqtSignal
 from ui_pramaSetup import Ui_winParamSetup
 from infoMessageBox import InfoMessageBox
 import cv2
-
 class ParamSetupWin(QWidget):
     rebootSignal=pyqtSignal()
     def __init__(self, parent=None):
@@ -27,8 +25,6 @@ class ParamSetupWin(QWidget):
         self.cameraModified=False
         self.initParamData()
 
-
-
     def getCameraCount(self):
         '''
         获取摄像头数量，但是遍历需要依次捕获每个摄像头的视频流，速度有些慢，尤其是usb摄像头。
@@ -43,9 +39,6 @@ class ParamSetupWin(QWidget):
                 break
             i=i+1
         return i
-
-
-
 
     def initParamData(self):
         shelf = shelve.open('cfg')
