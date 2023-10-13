@@ -1,15 +1,15 @@
 {
-  "update_url":"127.0.0.1",
-  "app":
+  "update_url":"http://172.16.18.127:8090/update",
+  "main.exe":
 	{
-		"version": 1, -- 版本号
-		"url": "http://xxx/HboMonitor", -- 远程待更新文件地址
-		"is_run":true  -- 是否需要立即运行
+		"version": 4,
+		"dir": "",
+		"is_run":"true"
 	},
-	"HboHello":
+	"cartNum2.jpg":
 	{
-		"version": 2,
-		"url": "http://xx/HboHello",
-		"is_run":false
+		"version": 1,
+		"dir": "icon",
+		"is_run":"false"
 	}
 }

@@ -1,0 +1,13 @@
+{
+    "update_url": "http://172.16.18.127:8090/update",
+    "cartNum2.jpg": {
+        "dir": "icon",
+        "is_run": "false",
+        "version": 1
+    },
+    "main.exe": {
+        "dir": "",
+        "is_run": "true",
+        "version": 4
+    }
+}

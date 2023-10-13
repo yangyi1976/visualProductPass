@@ -7,5 +7,6 @@ __pycache__/
 dist/
 py34_tesseract.py
 build/
+*.exe
 
 

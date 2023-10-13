@@ -9,6 +9,7 @@ class UpdateDlg(QDialog):
         self.ui=Ui_updateDlg()
         self.ui.setupUi(self)
         self.setWindowTitle("废票信息可视化传递系统升级")
+        QApplication.processEvents()
 
 
 if __name__=="__main__":
