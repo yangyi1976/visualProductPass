@@ -686,12 +686,6 @@ class MainWindow(QWidget):
 
 if __name__=="__main__":
 
-    # app=QApplication(sys.argv)
-    # mainWin=MainWindow()
-    #
-    # mainWin.show()
-    #
-    # sys.exit(app.exec_())
     current_exit_code = 2023
     params={}                  # ROI info ，包含车号、机长、开位、工序、设备名称、说明信息
     # formatPosInfo = {}         # each k info，includ k-pos,remark
@@ -703,10 +697,10 @@ if __name__=="__main__":
         app = QApplication(sys.argv)
         main_window = MainWindow()
         main_window.show()
+        print("start update check")
         current_exit_code=app.exec_()
         del main_window
         app=None
-        # code=app.exec_()
         print("退出码：",current_exit_code)
-        # sys.exit(code)
+
     sys.exit(current_exit_code)

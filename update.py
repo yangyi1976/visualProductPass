@@ -9,10 +9,13 @@ from updateDialog import UpdateDlg
 
 def get_remote_version(url):
     """获取远程数据"""
-    header = {'Content-type': 'application/json'}
-    request = requests.get(url=url, headers=header)  # 请求处理
-    remoteVer = request.json()  # 读取结果
-    return remoteVer
+    try:
+        header = {'Content-type': 'application/json'}
+        request = requests.get(url=url, headers=header)  # 请求处理
+        remoteVer = request.json()  # 读取结果
+        return remoteVer
+    except requests.RequestException as e:
+        raise Exception("连接更新服务器异常！%s" % str(e))
 
 
 def read_local_version():
@@ -28,7 +31,6 @@ def create_file(url, file_name,directory):
     """下载并创建文件"""
     temp_size = 0
     createOk=False
-
     try:
         if directory !="":
             if not os.path.exists(directory):
@@ -98,7 +100,7 @@ def run():
             local_json = read_local_version()
             url=local_json.get("update_url")
             online_json = get_remote_version(url+"?filename=version.json")
-            print("remote version:",online_json)
+
             if online_json == local_json:
                 # sleep 1 hour
                 time.sleep(3600)
@@ -132,7 +134,7 @@ def run():
             msgbox.exec()
         except Exception as e:
             write_log("更新失败:"+str(e))
-            msgbox = QMessageBox(QMessageBox.Information, "系统更新", "系统更新失败，")
+            msgbox = QMessageBox(QMessageBox.Information, "系统更新", "系统更新失败，%s" % str(e))
             msgbox.exec()
             raise e
         # sleep 1 hour

@@ -1,110 +1,30 @@
-2023-10-12 14:29:28	更新失败
-2023-10-12 14:32:08	更新失败
-2023-10-12 14:39:26	更新失败
-2023-10-12 14:39:57	更新失败
-2023-10-12 14:56:49	更新失败
-2023-10-12 15:00:40	更新失败:unsupported operand type(s) for +: 'NoneType' and 'str'
-2023-10-12 15:05:03	更新失败:unsupported operand type(s) for +: 'NoneType' and 'str'
-2023-10-12 15:05:23	更新失败:unsupported operand type(s) for +: 'NoneType' and 'str'
-2023-10-12 15:07:54	更新失败:本地版本文件丢失
-2023-10-12 15:08:33	更新失败:No connection adapters were found for '172.16.18.127:8090/update?filename=version.json'
-2023-10-12 15:09:56	更新失败:the JSON object must be str, not 'dict'
-2023-10-12 15:30:40	更新update地址：http://172.16.18.127:8090/update
-2023-10-12 16:02:17	更新失败:Expecting value: line 1 column 1 (char 0)
-2023-10-12 16:03:05	更新失败:Expecting value: line 1 column 1 (char 0)
-2023-10-12 16:04:54	更新失败:Expecting value: line 1 column 1 (char 0)
-2023-10-12 16:07:35	更新失败:Expecting value: line 1 column 1 (char 0)
-2023-10-12 16:12:17	更新update地址：http://172.16.18.127:8090/update
-2023-10-12 16:43:31	更新：main.exe 版本：1->2
-2023-10-12 16:53:33	更新：main.exe 版本：1->2
-2023-10-12 16:56:42	更新结果：success
-2023-10-13 09:50:16	更新：main.exe 版本：2->3
-2023-10-13 09:52:27	更新结果：success
-2023-10-13 10:04:59	更新：main.exe 版本：3->4
-2023-10-13 10:05:00	更新结果：success
-2023-10-13 10:08:59	更新：main.exe 版本：3->4
-2023-10-13 10:10:03	更新结果：success
-2023-10-13 10:11:55	更新：main.exe 版本：2->4
-2023-10-13 10:20:33	更新：main.exe 版本：2->4
-2023-10-13 10:20:33	更新结果：success
-2023-10-13 10:21:28	新增文件：main.exe ；版本: 4
-2023-10-13 10:22:25	新增结果：success
-2023-10-13 10:30:17	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 10:30:18	新增结果：success
-2023-10-13 10:30:18	更新：main.exe 版本：3->4
-2023-10-13 10:30:18	更新结果：success
-2023-10-13 10:35:12	更新失败:Expecting value: line 6 column 19 (char 151)
-2023-10-13 10:42:08	更新：main.exe 版本：2->4
-2023-10-13 10:42:09	更新结果：success
-2023-10-13 10:42:09	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 10:42:10	新增结果：success
-2023-10-13 10:44:00	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 10:44:00	新增结果：success
-2023-10-13 10:46:15	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 10:46:15	新增结果：success
-2023-10-13 10:49:19	更新：main.exe 版本：2->4
-2023-10-13 10:49:20	更新结果：success
-2023-10-13 10:51:13	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 10:53:38	新增结果：success
-2023-10-13 11:00:42	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 11:00:42	新增结果：success
-2023-10-13 11:00:42	更新：main.exe 版本：2->4
-2023-10-13 11:00:43	更新结果：success
-2023-10-13 11:04:14	更新：main.exe 版本：2->4
-2023-10-13 11:04:15	更新结果：success
-2023-10-13 11:04:15	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 11:04:15	新增结果：success
-2023-10-13 11:20:11	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 11:20:11	新增结果：success
-2023-10-13 11:20:11	更新：main.exe 版本：1->4
-2023-10-13 11:20:12	更新结果：success
-2023-10-13 14:57:53	更新：main.exe 版本：2->4
-2023-10-13 14:57:53	更新结果：download file fail>>get_data_by_url() takes 1 positional argument but 2 were given
-2023-10-13 14:58:06	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 14:58:06	新增结果：download file fail>>get_data_by_url() takes 1 positional argument but 2 were given
-2023-10-13 15:51:05	更新：main.exe 版本：2->4
-2023-10-13 15:51:05	更新结果：success
-2023-10-13 15:51:05	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 15:51:05	新增结果：success
-2023-10-13 15:55:25	更新：main.exe 版本：2->4
-2023-10-13 15:55:25	更新结果：download file fail>>get_data_by_url() takes 1 positional argument but 2 were given
-2023-10-13 16:02:40	更新：main.exe 版本：2->4
-2023-10-13 16:02:40	更新结果：success
-2023-10-13 16:02:41	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 16:02:41	新增结果：success
-2023-10-13 16:17:24	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 16:17:24	新增结果：success
-2023-10-13 16:17:25	更新：main.exe 版本：2->4
-2023-10-13 16:17:25	更新结果：success
-2023-10-13 16:18:38	新增文件：get_host_ip.py ；版本: 1
-2023-10-13 16:18:38	新增结果：success
-2023-10-13 16:18:42	更新：main.exe 版本：2->4
-2023-10-13 16:18:42	更新结果：success
-2023-10-13 16:20:29	更新：main.exe 版本：2->4
-2023-10-13 16:20:29	更新结果：success
-2023-10-13 16:25:19	更新：main.exe 版本：2->4
-2023-10-13 16:25:19	更新结果：success
-2023-10-13 16:26:27	更新：main.exe 版本：2->4
-2023-10-13 16:26:27	更新结果：success
-2023-10-13 16:27:15	更新：main.exe 版本：2->4
-2023-10-13 16:27:15	更新结果：success
-2023-10-13 16:28:01	更新：get_host_ip.py 版本：0->1
-2023-10-13 16:28:01	更新结果：success
-2023-10-13 16:28:04	更新：main.exe 版本：2->4
-2023-10-13 16:28:04	更新结果：success
-2023-10-13 16:29:22	更新：main.exe 版本：2->4
-2023-10-13 16:29:22	更新结果：success
-2023-10-13 16:32:06	更新：main.exe 版本：2->4
-2023-10-13 16:32:06	更新结果：success
-2023-10-13 16:35:44	更新：main.exe 版本：3->4
-2023-10-13 16:35:44	更新结果：success
-2023-10-13 16:35:51	更新：get_host_ip.py 版本：0->1
-2023-10-13 16:35:51	更新结果：success
-2023-10-13 16:38:03	更新：main.exe 版本：2->4
-2023-10-13 16:38:03	更新结果：success
-2023-10-13 16:38:09	更新：get_host_ip.py 版本：0->1
-2023-10-13 16:38:09	更新结果：success
-2023-10-13 17:11:35	新增文件：cartNum2.jpg ；版本: 1
-2023-10-13 17:11:35	更新失败:create_file() missing 1 required positional argument: 'directory'
-2023-10-13 17:13:03	新增文件：cartNum2.jpg ；版本: 1
-2023-10-13 17:13:03	新增结果：success
+2023-10-16 10:45:26	新增文件：get_host_ip.py ；版本: 1
+2023-10-16 10:45:26	新增结果：success
+2023-10-16 10:45:31	更新：main.exe 版本：4->5
+2023-10-16 10:45:31	更新结果：success
+2023-10-16 10:51:02	更新：main.exe 版本：4->5
+2023-10-16 10:51:02	更新结果：success
+2023-10-16 10:51:09	新增文件：get_host_ip.py ；版本: 1
+2023-10-16 10:51:09	新增结果：success
+2023-10-16 15:20:22	新增文件：get_host_ip.py ；版本: 1
+2023-10-16 15:20:23	新增结果：success
+2023-10-16 15:20:39	更新：main.exe 版本：4->5
+2023-10-16 15:20:39	更新结果：success
+2023-10-16 15:43:24	新增文件：get_host_ip.py ；版本: 1
+2023-10-16 15:43:24	新增结果：success
+2023-10-16 15:43:29	更新：main.exe 版本：4->5
+2023-10-16 15:43:29	更新结果：success
+2023-10-16 15:44:55	新增文件：get_host_ip.py ；版本: 1
+2023-10-16 15:44:55	新增结果：success
+2023-10-16 15:46:32	新增文件：get_host_ip.py ；版本: 1
+2023-10-16 15:46:32	新增结果：success
+2023-10-16 15:46:36	更新：main.exe 版本：4->5
+2023-10-16 15:46:36	更新结果：success
+2023-10-16 15:59:18	更新：main.exe 版本：4->5
+2023-10-16 15:59:18	更新结果：success
+2023-10-16 16:30:49	更新失败:catching classes that do not inherit from BaseException is not allowed
+2023-10-16 16:31:50	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0588C090>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-16 16:34:51	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x04FDC090>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-16 16:35:54	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0493C090>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-16 16:44:06	更新：main.exe 版本：4->5
+2023-10-16 16:44:06	更新结果：success

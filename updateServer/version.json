@@ -2,14 +2,9 @@
   "update_url":"http://172.16.18.127:8090/update",
   "main.exe":
 	{
-		"version": 4,
+		"version": 1,
 		"dir": "",
 		"is_run":"true"
-	},
-	"cartNum2.jpg":
-	{
-		"version": 1,
-		"dir": "icon",
-		"is_run":"false"
 	}
+	
 }
