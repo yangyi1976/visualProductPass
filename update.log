@@ -28,3 +28,56 @@
 2023-10-16 16:35:54	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0493C090>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
 2023-10-16 16:44:06	更新：main.exe 版本：4->5
 2023-10-16 16:44:06	更新结果：success
+2023-10-17 09:26:09	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x051CC090>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-17 09:26:47	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x03A04B30>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-17 09:29:45	更新：main.exe 版本：1->2
+2023-10-17 09:29:45	更新结果：success
+2023-10-17 09:33:49	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x03A74B30>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-17 10:33:38	更新：main.exe 版本：1->2
+2023-10-17 10:33:38	更新结果：success
+2023-10-17 10:34:55	更新：main.exe 版本：1->2
+2023-10-17 10:34:55	更新结果：success
+2023-10-17 10:45:47	更新：main.exe 版本：1->2
+2023-10-17 10:45:47	更新结果：success
+2023-10-17 10:47:00	更新：main.exe 版本：1->2
+2023-10-17 10:47:00	更新结果：success
+2023-10-17 11:39:20	更新失败:Expecting value: line 1 column 1 (char 0)
+2023-10-17 11:42:04	更新失败:Expecting value: line 1 column 1 (char 0)
+2023-10-17 11:42:27	更新失败:Expecting value: line 1 column 1 (char 0)
+2023-10-17 11:51:02	更新失败:连接更新服务器异常！HTTPConnectionPool(host='172.16.18.127', port=8090): Max retries exceeded with url: /update?filename=version.json (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0539C0D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。',))
+2023-10-17 11:51:52	更新：main.exe 版本：1->2
+2023-10-17 11:51:52	更新结果：success
+2023-10-17 14:32:02	更新：main.exe 版本：1->2
+2023-10-17 14:32:02	更新结果：success
+2023-10-17 16:19:28	更新：main.exe 版本：1->2
+2023-10-17 16:19:28	更新结果：success
+2023-10-17 16:22:48	更新：main.exe 版本：1->2
+2023-10-17 16:22:48	更新结果：success
+2023-10-17 16:42:25	更新：main.exe 版本：1->2
+2023-10-17 16:42:25	更新结果：success
+2023-10-17 16:43:30	更新：main.exe 版本：1->2
+2023-10-17 16:43:30	更新结果：success
+2023-10-17 16:44:34	更新：main.exe 版本：1->2
+2023-10-17 16:44:34	更新结果：success
+2023-10-17 16:46:17	更新：main.exe 版本：1->2
+2023-10-17 16:46:17	更新结果：success
+2023-10-17 16:47:38	更新：main.exe 版本：1->2
+2023-10-17 16:47:38	更新结果：success
+2023-10-17 16:49:19	更新：main.exe 版本：1->2
+2023-10-17 16:49:19	更新结果：success
+2023-10-17 16:49:51	更新：main.exe 版本：1->2
+2023-10-17 16:49:51	更新结果：success
+2023-10-17 16:50:30	更新：main.exe 版本：1->2
+2023-10-17 16:50:30	更新结果：success
+2023-10-17 16:54:47	更新：main.exe 版本：1->2
+2023-10-17 16:54:47	更新结果：success
+2023-10-17 16:57:08	更新：main.exe 版本：1->2
+2023-10-17 16:57:08	更新结果：success
+2023-10-17 16:58:17	更新：main.exe 版本：1->2
+2023-10-17 16:58:17	更新结果：success
+2023-10-17 17:15:11	更新：main.exe 版本：1->2
+2023-10-17 17:15:11	更新结果：success
+2023-10-17 17:16:33	更新：main.exe 版本：1->2
+2023-10-17 17:16:33	更新结果：success
+2023-10-17 17:17:43	更新：main.exe 版本：1->2
+2023-10-17 17:17:43	更新结果：success

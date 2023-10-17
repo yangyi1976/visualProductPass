@@ -2,7 +2,7 @@
   "update_url":"http://172.16.18.127:8090/update",
   "main.exe":
 	{
-		"version": 1,
+		"version": 2,
 		"dir": "",
 		"is_run":"true"
 	}

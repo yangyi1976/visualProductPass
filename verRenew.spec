@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['update.py'],
+a = Analysis(['verRenew.py'],
              pathex=['F:\\PycharmProjects\\pp_ocr_py34'],
              binaries=[],
              datas=[],
@@ -21,7 +21,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='update',
+          name='verRenew',
           debug=False,
           strip=False,
           upx=True,

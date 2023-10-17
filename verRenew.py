@@ -1,3 +1,4 @@
+#系统文件版本更新，比较本地version与远程version.json来判断是否更新
 import json
 import sys
 import time, os
@@ -132,6 +133,8 @@ def run():
             write_version_json(data=online_json)
             msgbox = QMessageBox(QMessageBox.Information, "系统更新", "系统升级成功，")
             msgbox.exec()
+            # msgbox.button(QMessageBox.Ok).animateClick(1000 * 5)
+
         except Exception as e:
             write_log("更新失败:"+str(e))
             msgbox = QMessageBox(QMessageBox.Information, "系统更新", "系统更新失败，%s" % str(e))

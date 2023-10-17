@@ -682,8 +682,6 @@ class MainWindow(QWidget):
         self.th.cap.release()
         self.th.exit()
 
-
-
 if __name__=="__main__":
 
     current_exit_code = 2023
@@ -691,16 +689,20 @@ if __name__=="__main__":
     # formatPosInfo = {}         # each k info，includ k-pos,remark
     listformatPosInfo=[]       # k list
     session=requests.Session()
+    os.system('taskkill /f /t /im verRenew.exe')
 
     while current_exit_code == 2023:
         print("开始事件循环")
         app = QApplication(sys.argv)
         main_window = MainWindow()
         main_window.show()
-        print("start update check")
+        time.sleep(5)
+        #启动自动升级程序
+        os.system('start "" "verRenew.exe"' )
+
         current_exit_code=app.exec_()
         del main_window
         app=None
         print("退出码：",current_exit_code)
-
+    os.system('taskkill /f /t /im verRenew.exe')
     sys.exit(current_exit_code)
